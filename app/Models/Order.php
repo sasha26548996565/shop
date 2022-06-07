@@ -12,6 +12,18 @@ class Order extends Model
 
     public function products(): Relation
     {
-        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
+    }
+
+    public function getFullPrice(): int
+    {
+        $sum = 0;
+
+        foreach ($this->products as $product)
+        {
+            $sum += $product->getTotalPrice($product->pivot->count);
+        }
+
+        return $sum;
     }
 }

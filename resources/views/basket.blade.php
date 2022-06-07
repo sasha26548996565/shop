@@ -18,35 +18,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($order->products as $product)
+                    @if (isset($order))
+                        @foreach ($order->products as $product)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('product', [$product->category->slug, $product->slug]) }}">
+                                        <img height="56px" src="http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg">
+                                        {{ $product->name }}
+                                    </a>
+                                </td>
+                                <td><span class="badge">{{ $product->pivot->count }}</span>
+                                    <div class="btn-group form-inline">
+                                        <form action="{{ route('basket-remove', $product) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger" href=""><span
+                                                    class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                        </form>
+                                        <form action="{{ route('basket-add', $product) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success" href=""><span
+                                                    class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>{{ $product->price }}</td>
+                                <td>{{ $product->getTotalPrice($product->pivot->count) }}</td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
-                            <td>
-                                <a href="{{ route('product', [$product->category->slug, $product->slug]) }}">
-                                    <img height="56px" src="http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg">
-                                    {{ $product->name }}
-                                </a>
-                            </td>
-                            <td><span class="badge">1</span>
-                                <div class="btn-group form-inline">
-                                    <form action="http://internet-shop.tmweb.ru/basket/remove/1" method="POST">
-                                        <button type="submit" class="btn btn-danger" href=""><span
-                                                class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                                        <input type="hidden" name="_token" value="m0e0MpGvpoZYDufOkob8xg9XCWxxh7D2yvBw4xDs">
-                                    </form>
-                                    <form action="{{ route('basket-add', $product) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success" href=""><span
-                                                class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                    </form>
-                                </div>
-                            </td>
-                            <td>{{ $product->price }}</td>
-                            <td>{{ $product->price }}</td>
+                            <td>корзина пуста</td>
                         </tr>
-                    @endforeach
+                    @endif
                     <tr>
                         <td colspan="3">Общая стоимость:</td>
-                        <td>71990 ₽</td>
+                        <td>{{ $order->getFullPrice() }}</td>
                     </tr>
                 </tbody>
             </table>

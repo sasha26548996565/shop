@@ -14,4 +14,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
+    public function getTotalPrice(int $count): int
+    {
+        return $this->price * $count;
+    }
 }

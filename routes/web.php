@@ -8,6 +8,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/basket', 'BasketController@basket')->name('basket');
     Route::get('/basket/place', 'BasketController@basketPlace')->name('basket-place');
     Route::post('/basket/add/{id}', 'BasketController@add')->name('basket-add');
+    Route::post('/basket/remove/{id}', 'BasketController@remove')->name('basket-remove');
 
     Route::get('/categories', 'MainController@categories')->name('categories');
     Route::get('/{category}', 'MainController@category')->name('category');
