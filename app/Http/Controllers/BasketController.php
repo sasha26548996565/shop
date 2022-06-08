@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class BasketController extends Controller
 {
-    public function basket(): View
+    public function index(): View
     {
         $orderId = session('orderId');
 
@@ -23,7 +24,7 @@ class BasketController extends Controller
         return view('basket');
     }
 
-    public function basketPlace(): View
+    public function place(): View
     {
         return view('order');
     }
@@ -51,6 +52,9 @@ class BasketController extends Controller
         {
             $order->products()->attach($productId);
         }
+
+        $product = Product::findOrFail($productId);
+        session()->flash('successAdd', "продукт {$product->name} добавлен в корзину");
 
         return to_route('basket', compact('order'));
     }
@@ -80,6 +84,28 @@ class BasketController extends Controller
             }
         }
 
+        $product = Product::findOrFail($productId);
+
+        session()->flash('successRemove', "удален продукт {$product->name}");
+
         return to_route('basket', compact('order'));
+    }
+
+    public function confirm(Request $request): RedirectResponse
+    {
+        $orderId = session('orderId');
+
+        if (is_null($orderId))
+        {
+            return to_route('index');
+        }
+
+        $order = Order::findOrFail($orderId);
+        $result = $order->saveOrder($request->name, $request->phone);
+
+        session()->flash($result ? 'success' : 'error',
+            $result ? 'ваш заказ принят в обработку' : 'ваш заказ не принят в обработку, возникла ошибка');
+
+        return to_route('index');
     }
 }

@@ -42,15 +42,43 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://internet-shop.tmweb.ru/login">Войти</a></li>
+                    @if (auth()->check())
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
 
+                            <input type="submit" class="btn btn-link navbar-btn navbar-link" value="Выйти">
+                        </form>
+                    @else
+                        <li><a href="{{ route('register') }}">Регистрация</a></li>
+                        <li><a href="{{ route('login') }}">Войти</a></li>
+                    @endif
                 </ul>
+
+                @if (auth()->check())
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{ route('order') }}">панель администратора</a></li>
+                    </ul>
+                @endif
             </div>
         </div>
     </nav>
 
     <div class="container">
-        @yield('content')
+        <div class="starter-template">
+            @if (session()->has('success'))
+                <p class="alert alert-success">{{ session()->get('success') }}</p>
+            @elseif (session()->has('error'))
+                <p class="alert alert-danger">{{ session()->get('error') }}</p>
+            @endif
+
+            @if (session()->has('successAdd'))
+                <p class="alert alert-success">{{ session()->get('successAdd') }}</p>
+            @elseif (session()->has('successRemove'))
+                <p class="alert alert-warning">{{ session()->get('successRemove') }}</p>
+            @endif
+
+            @yield('content')
+        </div>
     </div>
 </body>
 
