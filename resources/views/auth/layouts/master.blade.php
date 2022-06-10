@@ -30,13 +30,15 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
 
-                    <li><a href="{{ route('admin.categories.index') }}">Категории</a></li>
-                    <li><a href="">Товары</a>
-                    <li><a href="">Свойства</a>
-                    <li><a href="">Купоны</a>
-                    <li><a href="">Поставщики</a>
-                    </li>
-                    <li><a href="{{ route('admin.order') }}">Заказы</a></li>
+                    @if (auth()->user()->isAdmin())
+                        <li><a href="{{ route('admin.categories.index') }}">Категории</a></li>
+                        <li><a href="{{ route('admin.products.index') }}">Товары</a>
+                        <li><a href="">Свойства</a>
+                        <li><a href="">Купоны</a>
+                        <li><a href="">Поставщики</a>
+                        </li>
+                        <li><a href="{{ route('admin.order') }}">Заказы</a></li>
+                    @endif
 
                 </ul>
 

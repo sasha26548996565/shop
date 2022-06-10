@@ -15,4 +15,9 @@ class OrderController extends Controller
 
         return view('auth.order.index', compact('orders'));
     }
+
+    public function show(Order $order): View
+    {
+        return view('auth.order.show', compact('order'));
+    }
 }

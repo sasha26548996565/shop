@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Admin\Category\StoreRequest;
+use App\Http\Requests\Admin\Category\UpdateRequest;
 
 class CategoryController extends Controller
 {
@@ -29,9 +32,16 @@ class CategoryController extends Controller
         return view('auth.categories.form');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
-        Category::create($request->all());
+        $data = $request->validated();
+
+        if (isset($data['image']))
+        {
+            $data['image'] = Storage::disk('public')->put('/categories', $data['image']);
+        }
+
+        Category::create($data);
 
         return to_route('admin.categories.index');
     }
@@ -41,9 +51,17 @@ class CategoryController extends Controller
         return view('auth.categories.form', compact('category'));
     }
 
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(UpdateRequest $request, Category $category): RedirectResponse
     {
-        $category->update($request->all());
+        $data = $request->validated();
+
+        if (isset($category->image) && isset($data['image']))
+        {
+            Storage::delete($category->image);
+            $data['image'] = Storage::disk('public')->put('/categories', $data['image']);
+        }
+
+        $category->update($data);
 
         return to_route('admin.categories.index');
     }

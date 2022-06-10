@@ -1,4 +1,5 @@
 <?php
+namespace App;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -10,10 +11,18 @@ Auth::routes([
 ]);
 
 Route::namespace('App\Http\Controllers')->group(function () {
-    Route::namespace('Admin')->middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('auth')->prefix('person')->name('person.')->namespace('Person')->group(function () {
         Route::get('/order', 'OrderController@index')->name('order');
+        Route::get('/order/{order}', 'OrderController@show')->name('order.show');
+    });
+
+    Route::namespace('Admin')->middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+
+        Route::get('/order', 'OrderController@index')->name('order');
+        Route::get('/order/{order}', 'OrderController@show')->name('order.show');
 
         Route::resource('categories', 'CategoryController');
+        Route::resource('products', 'ProductController');
     });
 
     Route::get('/', 'MainController@index')->name('index');

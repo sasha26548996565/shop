@@ -38,6 +38,11 @@
                         <td>
                             <div class="btn-group" role="group">
                                 <a class="btn btn-success" type="button"
+                                @if (auth()->user()->isAdmin())
+                                    href="{{ route('admin.order.show', $order->id) }}"
+                                @else
+                                    href="{{ route('person.order.show', $order->id) }}"
+                                @endif
 
                                 >Открыть</a>
                             </div>

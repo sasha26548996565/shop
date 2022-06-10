@@ -23,10 +23,10 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{ route('index') }}">Все товары</a></li>
-                    <li><a href="{{ route('categories') }}">Категории</a>
+                    <li @if (Route::currentRouteNamed('index')) class="active" @endif><a href="{{ route('index') }}">Все товары</a></li>
+                    <li @if (Route::currentRouteNamed('categor*')) class="active" @endif><a href="{{ route('categories') }}">Категории</a>
                     </li>
-                    <li><a href="{{ route('basket') }}">В корзину</a></li>
+                    <li @if (Route::currentRouteNamed('basket*')) class="active" @endif><a href="{{ route('basket') }}">В корзину</a></li>
                     <li><a href="{{ route('index') }}">Сбросить проект в начальное состояние</a></li>
                     <li><a href="http://internet-shop.tmweb.ru/locale/en">en</a></li>
 
@@ -55,9 +55,15 @@
                 </ul>
 
                 @if (auth()->check())
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ route('admin.order') }}">панель администратора</a></li>
-                    </ul>
+                    @if (auth()->user()->isAdmin())
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{{ route('admin.order') }}">панель администратора</a></li>
+                        </ul>
+                    @else
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{{ route('person.order') }}">мои заказы</a></li>
+                        </ul>
+                    @endif
                 @endif
             </div>
         </div>
