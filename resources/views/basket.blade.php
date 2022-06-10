@@ -52,7 +52,9 @@
                 @endif
                 <tr>
                     <td colspan="3">Общая стоимость:</td>
-                    <td>{{ $order->getFullPrice() }}</td>
+                    @isset ($order)
+                        <td>{{ $order->getFullPrice() }}</td>
+                    @endisset
                 </tr>
             </tbody>
         </table>

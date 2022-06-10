@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 
 class BasketController extends Controller
@@ -51,6 +52,12 @@ class BasketController extends Controller
         } else
         {
             $order->products()->attach($productId);
+        }
+
+        if (Auth::check())
+        {
+            $order->user_id = Auth::id();
+            $order->save();
         }
 
         $product = Product::findOrFail($productId);
