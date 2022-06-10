@@ -29,15 +29,15 @@
 
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    {{-- @admin
-                    <li><a href="{{ route('categories.index') }}">Категории</a></li>
-                    <li><a href="{{ route('products.index') }}">Товары</a>
-                    <li><a href="{{ route('properties.index') }}">Свойства</a>
-                    <li><a href="{{ route('coupons.index') }}">Купоны</a>
-                    <li><a href="{{ route('merchants.index') }}">Поставщики</a>
+
+                    <li><a href="{{ route('admin.categories.index') }}">Категории</a></li>
+                    <li><a href="">Товары</a>
+                    <li><a href="">Свойства</a>
+                    <li><a href="">Купоны</a>
+                    <li><a href="">Поставщики</a>
                     </li>
-                    <li><a href="{{ route('home') }}">Заказы</a></li>
-                    @endadmin --}}
+                    <li><a href="{{ route('admin.order') }}">Заказы</a></li>
+
                 </ul>
 
                 @guest

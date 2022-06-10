@@ -56,7 +56,7 @@
 
                 @if (auth()->check())
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ route('order') }}">панель администратора</a></li>
+                        <li><a href="{{ route('admin.order') }}">панель администратора</a></li>
                     </ul>
                 @endif
             </div>
