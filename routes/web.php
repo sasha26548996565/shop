@@ -10,7 +10,7 @@ Auth::routes([
 ]);
 
 Route::namespace('App\Http\Controllers')->group(function () {
-    Route::namespace('Admin')->middleware('auth')->group(function () {
+    Route::namespace('Admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/order', 'OrderController@index')->name('order');
     });
 
