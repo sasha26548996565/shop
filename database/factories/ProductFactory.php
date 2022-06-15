@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => 'iphoneX',
+            'slug' => 'iphoneX',
+            'description' => 'good phone',
+            'image' => 'products/iphoneX.jpg',
+            'category_id' => Category::where('id', 1)->first()->id
         ];
     }
 }

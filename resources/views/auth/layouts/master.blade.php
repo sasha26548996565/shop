@@ -30,7 +30,7 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
 
-                    @if (auth()->user()->isAdmin())
+                    @if (auth()->check() && auth()->user()->isAdmin())
                         <li><a href="{{ route('admin.categories.index') }}">Категории</a></li>
                         <li><a href="{{ route('admin.products.index') }}">Товары</a>
                         <li><a href="">Свойства</a>

@@ -27,7 +27,7 @@
                     <li @if (Route::currentRouteNamed('categor*')) class="active" @endif><a href="{{ route('categories') }}">Категории</a>
                     </li>
                     <li @if (Route::currentRouteNamed('basket*')) class="active" @endif><a href="{{ route('basket') }}">В корзину</a></li>
-                    <li><a href="{{ route('index') }}">Сбросить проект в начальное состояние</a></li>
+                    <li><a href="{{ route('reset') }}">Сбросить проект в начальное состояние</a></li>
                     <li><a href="http://internet-shop.tmweb.ru/locale/en">en</a></li>
 
                     <li class="dropdown">
