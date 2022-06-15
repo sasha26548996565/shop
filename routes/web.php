@@ -11,7 +11,7 @@ Auth::routes([
 ]);
 
 Route::namespace('App\Http\Controllers')->group(function () {
-    Route::get('/reset', ResetController::class)->name('reset');
+    Route::get('/reset', 'ResetController')->name('reset');
 
     Route::middleware('auth')->prefix('person')->name('person.')->namespace('Person')->group(function () {
         Route::get('/order', 'OrderController@index')->name('order');

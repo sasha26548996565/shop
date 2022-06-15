@@ -14,11 +14,11 @@ class CategorySeeder extends Seeder
     {
         $this->categories = [
             ['name' => 'Мобильная техника', 'slug' => 'Mobile', 'description' => 'Категория мобильной техники',
-                'image' => 'categories/mobile.jpg'],
+                'image' => 'categories/mobile.png'],
             ['name' => 'Бытовая техника', 'slug' => 'appliances', 'description' => 'Категория бытовой техники',
-                'image' => 'categories/appliances.jpg'],
+                'image' => 'categories/appliances.png'],
             ['name' => 'Портативная техника', 'slug' => 'portable', 'description' => 'Категория портативной техники',
-                'image' => 'categories/portable.jpg']
+                'image' => 'categories/portable.png']
         ];
     }
 

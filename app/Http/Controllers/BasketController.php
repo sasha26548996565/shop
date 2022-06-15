@@ -34,6 +34,7 @@ class BasketController extends Controller
     {
         $orderId = session('orderId');
 
+
         if (is_null($orderId))
         {
             $order = Order::create();

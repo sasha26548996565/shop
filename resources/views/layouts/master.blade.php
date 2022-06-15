@@ -87,6 +87,10 @@
                 <p class="alert alert-warning">{{ session()->get('basketEmpty') }}</p>
             @endif
 
+            @if (session()->has('successReset'))
+                <p class="alert alert-success">{{ session()->get('successReset') }}</p>
+            @endif
+
             @yield('content')
         </div>
     </div>
