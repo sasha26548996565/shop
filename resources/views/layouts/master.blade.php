@@ -83,6 +83,10 @@
                 <p class="alert alert-warning">{{ session()->get('successRemove') }}</p>
             @endif
 
+            @if (session()->has('basketEmpty'))
+                <p class="alert alert-warning">{{ session()->get('basketEmpty') }}</p>
+            @endif
+
             @yield('content')
         </div>
     </div>

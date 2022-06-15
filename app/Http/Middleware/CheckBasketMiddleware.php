@@ -21,6 +21,8 @@ class CheckBasketMiddleware
 
         if ($order->products->count() == 0)
         {
+            session()->flash('basketEmpty', 'Ваша корзина пуста');
+
             return to_route('index');
         }
 
