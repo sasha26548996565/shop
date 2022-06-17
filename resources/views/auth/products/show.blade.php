@@ -32,6 +32,10 @@
                 <td>{{ $product->name_en }}</td>
             </tr>
             <tr>
+                <td>Цена</td>
+                <td>{{ $product->price }}</td>
+            </tr>
+            <tr>
                 <td>Описание</td>
                 <td>{{ $product->description }}</td>
             </tr>
@@ -50,17 +54,11 @@
             <tr>
                 <td>Лейблы</td>
                 <td>
-                    {{-- @if($product->isNew())
-                        <span class="badge badge-success">Новинка</span>
-                    @endif
-
-                    @if($product->isRecommend())
-                        <span class="badge badge-warning">Рекомендуем</span>
-                    @endif
-
-                    @if($product->isHit())
-                        <span class="badge badge-danger">Хит продаж!</span>
-                    @endif --}}
+                    @foreach ($product->getLabels() as $field => $name)
+                        @if ($product[$field] == 1)
+                            <span class="badge badge-success">{{ $name }}</span>
+                        @endif
+                    @endforeach
                 </td>
             </tr>
             </tbody>

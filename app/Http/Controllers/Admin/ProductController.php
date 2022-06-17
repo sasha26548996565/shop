@@ -16,6 +16,13 @@ use App\Http\Requests\Admin\Product\UpdateRequest;
 
 class ProductController extends Controller
 {
+    private Product $product;
+
+    public function __construct(Product $product)
+    {
+        $this->product = $product;
+    }
+
     public function index(): View
     {
         $products = Product::latest()->get();
@@ -31,8 +38,9 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = Category::latest()->get();
+        $labels = $this->product->getLabels();
 
-        return view('auth.products.form', compact('categories'));
+        return view('auth.products.form', compact('categories', 'labels'));
     }
 
     public function store(StoreRequest $request): RedirectResponse
@@ -52,8 +60,9 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $categories = Category::latest()->get();
+        $labels = $this->product->getLabels();
 
-        return view('auth.products.form', compact('categories', 'product'));
+        return view('auth.products.form', compact('categories', 'product', 'labels'));
     }
 
     public function update(UpdateRequest $request, Product $product): RedirectResponse
@@ -64,6 +73,14 @@ class ProductController extends Controller
         {
             Storage::delete($data['image']);
             $data['image'] = Storage::disk('public')->put('/products', $data['image']);
+        }
+
+        foreach ($this->product->getLabels() as $field => $name)
+        {
+            if (! isset($data[$field]))
+            {
+                $data[$field] = 0;
+            }
         }
 
         $product->update($data);

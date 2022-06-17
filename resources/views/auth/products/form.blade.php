@@ -72,6 +72,16 @@
                 <br>
 
                 <div class="input-group row">
+                    <label for="price" class="col-sm-2 col-form-label">Цена</label>
+                    <div class="col-sm-6">
+                        @include('auth.layouts.error', ['fieldName' => 'price'])
+                        <input type="number" name="price" id="price" step="0.01"
+                            @isset($product) value="{{ $product->price }}" @endisset
+                        >
+                    </div>
+                </div>
+                <br>
+                <div class="input-group row">
                     <label for="image" class="col-sm-2 col-form-label">Картинка: </label>
                     <div class="col-sm-10">
                         <label class="btn btn-default btn-file">
@@ -80,6 +90,17 @@
                     </div>
                 </div>
                 <br>
+
+                @foreach ($labels as $field => $title)
+                    <div class="form-group row">
+                        <label for="code" class="col-sm-2 col-form-label">{{ $title }}: </label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" name="{{$field}}" id="{{$field}}"
+                            @checked(isset($product) && $product[$field]) >
+                        </div>
+                    </div>
+                    <br>
+                @endforeach
                 <button class="btn btn-success">Сохранить</button>
             </div>
         </form>

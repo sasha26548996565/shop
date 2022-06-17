@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -17,8 +20,53 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function getTotalPrice(int $count): int
+    public function getTotalPrice(int $count): float
     {
         return $this->price * $count;
+    }
+
+    public function hit(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => $value == "on" ? 1 : 0
+        );
+    }
+
+    public function recommend(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => $value == "on" ? 1 : 0
+        );
+    }
+
+    public function newest(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => $value == "on" ? 1 : 0
+        );
+    }
+
+    public function isHit(): bool
+    {
+        return $this->hit == 1;
+    }
+
+    public function isRecommend(): bool
+    {
+        return $this->recommend == 1;
+    }
+
+    public function isNewest(): bool
+    {
+        return $this->newest == 1;
+    }
+
+    public function getLabels(): array
+    {
+        return [
+            'hit' => 'Хит',
+            'newest' => 'Новинка',
+            'recommend' => 'Рекомендованные'
+        ];
     }
 }

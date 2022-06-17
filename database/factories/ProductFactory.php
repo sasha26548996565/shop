@@ -21,6 +21,7 @@ class ProductFactory extends Factory
             'name' => 'iphoneX',
             'slug' => 'iphoneX',
             'description' => 'good phone',
+            'price' => 70000,
             'image' => 'products/iphoneX.png',
             'category_id' => Category::where('id', 1)->first()->id
         ];

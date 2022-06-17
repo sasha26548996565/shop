@@ -15,7 +15,7 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
     }
 
-    public function getFullPrice(): int
+    public function getFullPrice(): float
     {
         $sum = 0;
 
