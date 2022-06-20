@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Gate::define('reset', function (User $user) {
-            return $user->isAdmin() ;
+            return $user->isAdmin();
         });
     }
 }
