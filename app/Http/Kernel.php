@@ -65,6 +65,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'admin' => \App\Http\Middleware\CheckUserRoleMiddleware::class,
-        'basket_not_empty' => \App\Http\Middleware\CheckBasketMiddleware::class
+        'basket_not_empty' => \App\Http\Middleware\CheckBasketMiddleware::class,
+
+        'reset' => \App\Http\Middleware\CanResetProjectMiddleware::class
     ];
 }

@@ -11,8 +11,6 @@ Auth::routes([
 ]);
 
 Route::namespace('App\Http\Controllers')->group(function () {
-    Route::get('/reset/fghfgh/fghfg/hfg/hf/gh/fgh/gf', 'ResetController')->name('reset');
-
     Route::middleware('auth')->prefix('person')->name('person.')->namespace('Person')->group(function () {
         Route::get('/order', 'OrderController@index')->name('order');
         Route::get('/order/{order}', 'OrderController@show')->name('order.show');
@@ -43,4 +41,6 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/categories', 'MainController@categories')->name('categories');
     Route::get('/{category}', 'MainController@category')->name('category');
     Route::get('/{category}/{productS}', 'MainController@product')->name('product');
+
+    //Route::middleware('reset')->get('/reset/fghfgh/fghfg/hfg/hf/gh/fgh/gf', 'ResetController')->name('reset');
 });
