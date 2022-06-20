@@ -13,7 +13,7 @@ class MainController extends Controller
 {
     public function index(): View
     {
-        $products = Product::latest()->get();
+        $products = Product::latest()->paginate(10);
 
         return view('index', compact('products'));
     }

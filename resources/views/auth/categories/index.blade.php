@@ -45,4 +45,6 @@
         <a class="btn btn-success" type="button"
            href="{{ route('admin.categories.create') }}">Добавить категорию</a>
     </div>
+
+    {{ $categories->withQueryString()->links('includes.pagination') }}
 @endsection

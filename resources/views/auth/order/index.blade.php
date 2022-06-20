@@ -52,4 +52,6 @@
             </tbody>
         </table>
     </div>
+
+    {{ $orders->withQueryString()->links('includes.pagination') }}
 @endsection

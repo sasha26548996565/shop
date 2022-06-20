@@ -45,4 +45,6 @@
         <a class="btn btn-success" type="button"
            href="{{ route('admin.products.create') }}">Добавить товар</a>
     </div>
+
+    {{ $products->withQueryString()->links('includes.pagination') }}
 @endsection
