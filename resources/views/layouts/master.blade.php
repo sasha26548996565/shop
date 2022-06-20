@@ -28,9 +28,9 @@
                     </li>
                     <li @if (Route::currentRouteNamed('basket*')) class="active" @endif><a href="{{ route('basket') }}">В корзину</a></li>
 
-                    @can ('reset', auth()->user())
+                    {{-- @can ('reset', auth()->user())
                         <li><a href="{{ route('reset') }}">Сбросить проект в начальное состояние</a></li>
-                    @endcan
+                    @endcan --}}
 
                     <li><a href="http://internet-shop.tmweb.ru/locale/en">en</a></li>
 

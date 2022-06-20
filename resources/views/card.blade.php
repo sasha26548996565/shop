@@ -15,13 +15,13 @@
 
         <img src="{{ asset(Storage::url($product->image)) }}" alt="iPhone X 64GB">
 
-        @foreach ($product->getLabels() as $field => $name)
-            @if ($product->issetLabel($field))
-                <span class="badge badge-success" style="position: absolute; margin-top: 5px;">{{ $name }}</span>
-            @endif
-        @endforeach
-
         <div class="caption">
+            @foreach ($product->getLabels() as $field => $name)
+                @if ($product->issetLabel($field))
+                    <span class="badge badge-success">{{ $name }}</span>
+                @endif
+            @endforeach
+
             <h3>{{ $product->name }}</h3>
             <p>{{ $product->price }}</p>
             <p>

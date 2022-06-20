@@ -11,11 +11,40 @@ use Illuminate\Contracts\View\View;
 
 class MainController extends Controller
 {
-    public function index(): View
-    {
-        $products = Product::latest()->paginate(10);
+    private Product $product;
 
-        return view('index', compact('products'));
+    public function __construct(Product $product)
+    {
+        $this->product = $product;
+    }
+
+    public function index(Request $request): View
+    {
+        $productsQuery = Product::query();
+
+        if ($request->filled('price_from'))
+        {
+            $productsQuery->where('price', '>=', $request->price_from);
+        }
+
+        if ($request->filled('price_to'))
+        {
+            $productsQuery->where('price', '<=', $request->price_to);
+        }
+
+        foreach ($this->product->getLabels() as $field => $name)
+        {
+            if ($request->has($field))
+            {
+                $productsQuery->where($field, 1);
+            }
+        }
+
+        $products = $productsQuery->latest()->paginate(10);
+
+        $labels = $this->product->getLabels();
+
+        return view('index', compact('products', 'labels'));
     }
 
     public function categories(): View
