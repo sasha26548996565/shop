@@ -1,10 +1,5 @@
 <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-        @foreach ($product->getLabels() as $field => $name)
-            @if ($product[$field] == 1)
-                <span class="badge badge-success">{{ $name }}</span>
-            @endif
-        @endforeach
 
         {{-- @if ($product->isNewest())
             <span class="badge badge-success">Новинка</span>
@@ -19,6 +14,13 @@
         @endif --}}
 
         <img src="{{ asset(Storage::url($product->image)) }}" alt="iPhone X 64GB">
+
+        @foreach ($product->getLabels() as $field => $name)
+            @if ($product->issetLabel($field))
+                <span class="badge badge-success" style="position: absolute; margin-top: 5px;">{{ $name }}</span>
+            @endif
+        @endforeach
+
         <div class="caption">
             <h3>{{ $product->name }}</h3>
             <p>{{ $product->price }}</p>

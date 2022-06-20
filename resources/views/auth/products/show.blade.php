@@ -55,7 +55,7 @@
                 <td>Лейблы</td>
                 <td>
                     @foreach ($product->getLabels() as $field => $name)
-                        @if ($product[$field] == 1)
+                        @if ($product->issetLabel($field))
                             <span class="badge badge-success">{{ $name }}</span>
                         @endif
                     @endforeach

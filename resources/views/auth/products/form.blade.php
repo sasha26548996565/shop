@@ -96,7 +96,7 @@
                         <label for="code" class="col-sm-2 col-form-label">{{ $title }}: </label>
                         <div class="col-sm-10">
                             <input type="checkbox" name="{{$field}}" id="{{$field}}"
-                            @checked(isset($product) && $product[$field]) >
+                            @checked(isset($product) && $product->issetLabel($field)) >
                         </div>
                     </div>
                     <br>

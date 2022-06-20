@@ -46,21 +46,6 @@ class Product extends Model
         );
     }
 
-    public function isHit(): bool
-    {
-        return $this->hit == 1;
-    }
-
-    public function isRecommend(): bool
-    {
-        return $this->recommend == 1;
-    }
-
-    public function isNewest(): bool
-    {
-        return $this->newest == 1;
-    }
-
     public function getLabels(): array
     {
         return [
@@ -68,5 +53,10 @@ class Product extends Model
             'newest' => 'Новинка',
             'recommend' => 'Рекомендованные'
         ];
+    }
+
+    public function issetLabel(string $labelName): bool
+    {
+        return $this[$labelName] == 1;
     }
 }

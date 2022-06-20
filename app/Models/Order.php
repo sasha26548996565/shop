@@ -39,9 +39,8 @@ class Order extends Model
             session()->forget('orderId');
 
             return true;
-        } else
-        {
-            return false;
         }
+
+        return false;
     }
 }
