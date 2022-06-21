@@ -7,7 +7,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Filters\ProductFilter;
 use Illuminate\Contracts\View\View;
+use App\Http\Requests\ProductFilterRequest;
 
 class MainController extends Controller
 {
@@ -18,29 +20,10 @@ class MainController extends Controller
         $this->product = $product;
     }
 
-    public function index(Request $request): View
+    public function index(ProductFilterRequest $request): View
     {
-        $productsQuery = Product::query();
-
-        if ($request->filled('price_from'))
-        {
-            $productsQuery->where('price', '>=', $request->price_from);
-        }
-
-        if ($request->filled('price_to'))
-        {
-            $productsQuery->where('price', '<=', $request->price_to);
-        }
-
-        foreach ($this->product->getLabels() as $field => $name)
-        {
-            if ($request->has($field))
-            {
-                $productsQuery->where($field, 1);
-            }
-        }
-
-        $products = $productsQuery->latest()->paginate(10);
+        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($request->validated())]);
+        $products = Product::filter($filter)->latest()->paginate(10);
 
         $labels = $this->product->getLabels();
 
