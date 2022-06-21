@@ -7,19 +7,23 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\Product\StoreRequest;
 use App\Http\Requests\Admin\Product\UpdateRequest;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
+    private ProductService $service;
     private Product $product;
 
-    public function __construct(Product $product)
+    public function __construct(Product $product, ProductService $service)
     {
+        $this->service = $service;
         $this->product = $product;
     }
 
@@ -45,14 +49,7 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        if (isset($data['image']))
-        {
-            $data['image'] = Storage::disk('public')->put('/products', $data['image']);
-        }
-
-        $product = Product::create($data);
+        $product = $this->service->store($request->validated());
 
         return to_route('admin.products.show', ['product' => $product->id]);
     }
@@ -67,23 +64,7 @@ class ProductController extends Controller
 
     public function update(UpdateRequest $request, Product $product): RedirectResponse
     {
-        $data = $request->validated();
-
-        if (isset($data['image']) && isset($product->image))
-        {
-            Storage::delete($data['image']);
-            $data['image'] = Storage::disk('public')->put('/products', $data['image']);
-        }
-
-        foreach ($this->product->getLabels() as $field => $name)
-        {
-            if (! isset($data[$field]))
-            {
-                $data[$field] = 0;
-            }
-        }
-
-        $product->update($data);
+        $product = $this->service->update($request->validated(), $product);
 
         return to_route('admin.products.show', ['product' => $product->id]);
     }
