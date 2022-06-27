@@ -37,9 +37,13 @@ class ProductService
 
         try
         {
-            if (isset($data['image']) && isset($product->image))
+            if (isset($data['image']))
             {
-                Storage::delete($data['image']);
+                if (isset($product->image))
+                {
+                    Storage::delete($data['image']);
+                }
+
                 $data['image'] = Storage::disk('public')->put('/products', $data['image']);
             }
 

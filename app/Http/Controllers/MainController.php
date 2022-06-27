@@ -23,7 +23,7 @@ class MainController extends Controller
     public function index(ProductFilterRequest $request): View
     {
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($request->validated())]);
-        $products = Product::filter($filter)->latest()->paginate(10);
+        $products = Product::with('category')->filter($filter)->latest()->paginate(10);
 
         $labels = $this->product->getLabels();
 

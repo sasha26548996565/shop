@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -42,5 +43,10 @@ class Order extends Model
         }
 
         return false;
+    }
+
+    public function scopeGetActive(Builder $query): Builder
+    {
+        return $query->where('status', 1);
     }
 }
