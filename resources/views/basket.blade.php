@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 @if (isset($order))
-                    @foreach ($order->products as $product)
+                    @foreach ($order->products()->with('category')->get() as $product)
                         <tr>
                             <td>
                                 <a href="{{ route('product', [$product->category->slug, $product->slug]) }}">
@@ -53,7 +53,7 @@
                 <tr>
                     <td colspan="3">Общая стоимость:</td>
                     @isset ($order)
-                        <td>{{ $order->getFullPrice() }}</td>
+                        <td>{{ $order->getFullSum() }}</td>
                     @endisset
                 </tr>
             </tbody>

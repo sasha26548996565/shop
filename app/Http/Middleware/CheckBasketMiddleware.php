@@ -12,18 +12,9 @@ class CheckBasketMiddleware
     {
         $orderId = session('orderId');
 
-        if (is_null($orderId))
+        if (is_null($orderId) && Order::getFullSum() < 0)
         {
             return redirect()->back();
-        }
-
-        $order = Order::findOrFail($orderId);
-
-        if ($order->products->count() == 0)
-        {
-            session()->flash('basketEmpty', 'Ваша корзина пуста');
-
-            return to_route('index');
         }
 
         return $next($request);

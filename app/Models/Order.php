@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -16,7 +17,23 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
     }
 
-    public function getFullPrice(): float
+    public static function getFullSum()
+    {
+        return session('full_order_sum', 0);
+    }
+
+    public static function changeFullSum($changeSum): void
+    {
+        $sum = self::getFullSum() + $changeSum;
+        session(['full_order_sum' => $sum]);
+    }
+
+    public static function eraseSum(): void
+    {
+        session()->forget('full_order_sum');
+    }
+
+    public function calculateFullSum(): float
     {
         $sum = 0;
 

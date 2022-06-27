@@ -62,6 +62,9 @@ class BasketController extends Controller
         }
 
         $product = Product::findOrFail($productId);
+
+        Order::changeFullSum($product->price);
+
         session()->flash('successAdd', "продукт {$product->name} добавлен в корзину");
 
         return to_route('basket', compact('order'));
@@ -94,6 +97,8 @@ class BasketController extends Controller
 
         $product = Product::findOrFail($productId);
 
+        Order::changeFullSum(-$product->price);
+
         session()->flash('successRemove', "удален продукт {$product->name}");
 
         return to_route('basket', compact('order'));
@@ -113,6 +118,8 @@ class BasketController extends Controller
 
         session()->flash($result ? 'success' : 'error',
             $result ? 'ваш заказ принят в обработку' : 'ваш заказ не принят в обработку, возникла ошибка');
+
+        Order::eraseSum();
 
         return to_route('index');
     }
