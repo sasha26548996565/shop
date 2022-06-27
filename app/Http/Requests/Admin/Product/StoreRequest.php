@@ -30,6 +30,7 @@ class StoreRequest extends FormRequest
             'price' => 'required|numeric',
             'image' => '',
             'category_id' => 'required',
+            'count' => 'required|min:0',
             'hit' => '',
             'recommend' => '',
             'newest' => ''

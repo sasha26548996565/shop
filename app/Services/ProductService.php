@@ -47,13 +47,7 @@ class ProductService
                 $data['image'] = Storage::disk('public')->put('/products', $data['image']);
             }
 
-            foreach ($product->getLabels() as $field => $name)
-            {
-                if (! isset($data[$field]))
-                {
-                    $data[$field] = 0;
-                }
-            }
+            $data = $product->disableLabel($data);
 
             $product->update($data);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Traits\Filterable;
+use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -59,5 +60,23 @@ class Product extends Model
     public function issetLabel(string $labelName): bool
     {
         return $this[$labelName] == 1;
+    }
+
+    public function disableLabel(array $params): array
+    {
+        foreach ($this->getLabels() as $field => $name)
+        {
+            if (! isset($params[$field]))
+            {
+                $params[$field] = 0;
+            }
+        }
+
+        return $params;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->count > 0;
     }
 }

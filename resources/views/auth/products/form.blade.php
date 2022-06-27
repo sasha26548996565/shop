@@ -50,11 +50,7 @@
                         <select name="category_id" id="category_id" class="form-control">
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}"
-                                        @isset($product)
-                                        @if($product->category_id == $category->id)
-                                        selected
-                                    @endif
-                                    @endisset
+                                    @selected(isset($product) && $product->category_id == $category->id)
                                 >{{ $category->name }}</option>
                             @endforeach
                         </select>
@@ -77,6 +73,17 @@
                         @include('auth.layouts.error', ['fieldName' => 'price'])
                         <input type="number" name="price" id="price" step="0.01"
                             @isset($product) value="{{ $product->price }}" @endisset
+                        >
+                    </div>
+                </div>
+                <br>
+
+                <div class="input-group row">
+                    <label for="price" class="col-sm-2 col-form-label">Остаток (Количество)</label>
+                    <div class="col-sm-6">
+                        @include('auth.layouts.error', ['fieldName' => 'count'])
+                        <input type="number" name="count" id="count"
+                            @isset($product) value="{{ $product->count }}" @endisset
                         >
                     </div>
                 </div>

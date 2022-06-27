@@ -18,6 +18,9 @@
                     Название
                 </th>
                 <th>
+                    Осталось
+                </th>
+                <th>
                     Действия
                 </th>
             </tr>
@@ -26,6 +29,7 @@
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->slug }}</td>
                     <td>{{ $product->name }}</td>
+                    <td>{{ $product->count }}</td>
                     <td>
                         <div class="btn-group" role="group">
                             <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST">

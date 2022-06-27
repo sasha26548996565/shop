@@ -1,19 +1,6 @@
 <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-
-        {{-- @if ($product->isNewest())
-            <span class="badge badge-success">Новинка</span>
-        @endif
-
-        @if ($product->isRecommend())
-            <span class="badge badge-warning">Рекомендуем</span>
-        @endif
-
-        @if ($product->isHit())
-            <span class="badge badge-danger">Хит продаж!</span>
-        @endif --}}
-
-        <img src="{{ asset(Storage::url($product->image)) }}" alt="iPhone X 64GB">
+        <img src="{{ asset(Storage::url($product->image)) }}" alt="{{ $product->name }}">
 
         <div class="caption">
             @foreach ($product->getLabels() as $field => $name)
@@ -23,13 +10,19 @@
             @endforeach
 
             <h3>{{ $product->name }}</h3>
-            <p>{{ $product->price }}</p>
+            <p>Осталось: {{ $product->count }}</p>
+            <p>{{ $product->price }} RUB</p>
             <p>
-            <form action="{{ route('basket-add', $product->id) }}" method="POST">
-                @csrf
 
-                <input type="submit" class="btn btn-primary" value="корзина">
-            </form>
+            @if ($product->isAvailable())
+                <form action="{{ route('basket-add', $product->id) }}" method="POST">
+                    @csrf
+
+                    <input type="submit" class="btn btn-primary" value="корзина">
+                </form>
+            @else
+                Нет на складе<br>
+            @endif
 
             {{ $product->category->name }}
 

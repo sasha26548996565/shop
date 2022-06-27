@@ -36,6 +36,10 @@
                 <td>{{ $product->price }}</td>
             </tr>
             <tr>
+                <td>Осталось</td>
+                <td>{{ $product->count }}</td>
+            </tr>
+            <tr>
                 <td>Описание</td>
                 <td>{{ $product->description }}</td>
             </tr>
