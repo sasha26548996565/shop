@@ -6,8 +6,10 @@ namespace App\Classes;
 
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use App\Mail\OrderCreatedMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Basket
 {
@@ -23,14 +25,16 @@ class Basket
         return $this->order;
     }
 
-    public function saveOrder(string $name, string $phone): bool
+    public function saveOrder(string $name, string $phone, string $email): bool
     {
         if (! $this->countAvailable(true))
         {
             return false;
         }
 
-        return $this->order->saveOrder($name, $phone);
+        Mail::to($email)->send(new OrderCreatedMail());
+
+        return $this->order->saveOrder($name, $phone, $email);
     }
 
     public function countAvailable(bool $updateCount = false)

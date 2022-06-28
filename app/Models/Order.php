@@ -47,7 +47,7 @@ class Order extends Model
         return $sum;
     }
 
-    public function saveOrder($name, $phone): bool
+    public function saveOrder(string $name, string $phone, string $email): bool
     {
         if ($this->status == 0)
         {

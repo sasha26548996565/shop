@@ -59,7 +59,8 @@ class BasketController extends Controller
 
     public function confirm(Request $request): RedirectResponse
     {
-        $result = (new Basket)->saveOrder($request->name, $request->phone);
+        $email = Auth::check() ? Auth::user()->email : $request->email;
+        $result = (new Basket)->saveOrder($request->name, $request->phone, $email);
 
         session()->flash($result ? 'success' : 'error',
             $result ? 'ваш заказ принят в обработку' : 'ваш заказ не принят в обработку, возникла ошибка');
