@@ -28,13 +28,13 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/', 'MainController@index')->name('index');
 
     Route::name('basket')->prefix('basket')->group(function () {
-        Route::post('/add/{id}', 'BasketController@add')->name('-add');
+        Route::post('/add/{product}', 'BasketController@add')->name('-add');
 
         Route::middleware(['basket_not_empty'])->group(function () {
             Route::get('/', 'BasketController@index')->name('');
             Route::get('/place', 'BasketController@place')->name('-place');
             Route::post('/confirm', 'BasketController@confirm')->name('-confirm');
-            Route::post('/remove/{id}', 'BasketController@remove')->name('-remove');
+            Route::post('/remove/{product}', 'BasketController@remove')->name('-remove');
         });
     });
 

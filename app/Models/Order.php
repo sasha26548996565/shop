@@ -12,6 +12,8 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function products(): Relation
     {
         return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
