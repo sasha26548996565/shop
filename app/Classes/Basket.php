@@ -25,7 +25,35 @@ class Basket
 
     public function saveOrder(string $name, string $phone): bool
     {
+        if (! $this->countAvailable(true))
+        {
+            return false;
+        }
+
         return $this->order->saveOrder($name, $phone);
+    }
+
+    public function countAvailable(bool $updateCount = false)
+    {
+        foreach ($this->order->products as $product)
+        {
+            if ($product->count < $this->getPivotRow($product->id)->count)
+            {
+                return false;
+            }
+
+            if ($updateCount)
+            {
+                $product->count -= $this->getPivotRow($product->id)->count;
+            }
+        }
+
+        if ($updateCount)
+        {
+            $this->order->products->map->save();
+        }
+
+        return true;
     }
 
     public function addProduct(Product $product): bool
@@ -33,7 +61,7 @@ class Basket
         if ($this->order->products->contains($product->id))
         {
             $pivotRow = $this->getPivotRow($product->id);
-            $pivotRow->increment('count', 1);
+            $pivotRow->count++;
 
             if ($pivotRow->count > $product->count)
             {
@@ -69,7 +97,7 @@ class Basket
                 $this->order->products()->detach($product->id);
             } else
             {
-                $pivotRow->decrement('count', 1);
+                $pivotRow->count--;
                 $pivotRow->update();
             }
 

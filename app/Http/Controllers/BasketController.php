@@ -21,9 +21,17 @@ class BasketController extends Controller
         return view('basket', compact('order'));
     }
 
-    public function place(): View
+    public function place(): View|RedirectResponse
     {
-        $order = (new Basket)->getOrder();
+        $basket = new Basket();
+        $order = $basket->getOrder();
+
+        if (! $basket->countAvailable())
+        {
+            session()->flash('warning', 'Товар недоступен в большем количестве');
+
+            return redirect()->back();
+        }
 
         return view('order', compact('order'));
     }
@@ -31,9 +39,10 @@ class BasketController extends Controller
     public function add(Product $product): RedirectResponse
     {
         $order = (new Basket)->getOrder();
-        (new Basket)->addProduct($product);
+        $result = (new Basket)->addProduct($product);
 
-        session()->flash('successAdd', "продукт {$product->name} добавлен в корзину");
+        session()->flash($result ? 'successAdd' : 'errorAdd',
+            $result ? 'товар добавлен в корзину' : "Товар {$product->name} недоступен в большем количестве");
 
         return to_route('basket', compact('order'));
     }

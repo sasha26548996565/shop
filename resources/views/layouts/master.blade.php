@@ -77,12 +77,16 @@
         <div class="starter-template">
             @if (session()->has('success'))
                 <p class="alert alert-success">{{ session()->get('success') }}</p>
+            @elseif (session()->has('warning'))
+                <p class="alert alert-warning">{{ session()->get('warning') }}</p>
             @elseif (session()->has('error'))
                 <p class="alert alert-danger">{{ session()->get('error') }}</p>
             @endif
 
             @if (session()->has('successAdd'))
                 <p class="alert alert-success">{{ session()->get('successAdd') }}</p>
+            @elseif (session()->has('errorAdd'))
+                <p class="alert alert-danger">{{ session()->get('errorAdd') }}</p>
             @elseif (session()->has('successRemove'))
                 <p class="alert alert-warning">{{ session()->get('successRemove') }}</p>
             @endif
