@@ -6,12 +6,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Filters\ProductFilter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\SubscriptionRequest;
 use App\Http\Requests\ProductFilterRequest;
-use App\Models\Subscription;
+use Illuminate\Http\RedirectResponse;
 
 class MainController extends Controller
 {
@@ -52,9 +54,10 @@ class MainController extends Controller
         return view('category', compact('category'));
     }
 
-    public function subscripe(Request $request, Product $product)
+    public function subscripe(SubscriptionRequest $request, Product $product): RedirectResponse
     {
-        $email = Auth::check() ? Auth::user()->email : $request->email;
+        $email = Auth::check() ? Auth::user()->email : $request->validated()->email;
+
         Subscription::create(['email' => $email, 'product_id' => $product->id]);
 
         return redirect()->back()->with('success',  "Спасибо, мы сообщим вам когда продукт $product->name будет в наличии");
