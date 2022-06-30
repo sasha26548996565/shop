@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use App\Jobs\OrderCreateJob;
 use App\Models\Order;
 use App\Models\Product;
 use App\Mail\OrderCreatedMail;
@@ -32,7 +33,7 @@ class Basket
             return false;
         }
 
-        Mail::to($email)->send(new OrderCreatedMail());
+        dispatch(new OrderCreateJob($email));
 
         return $this->order->saveOrder($name, $phone, $email);
     }

@@ -9,7 +9,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Filters\ProductFilter;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProductFilterRequest;
+use App\Models\Subscription;
 
 class MainController extends Controller
 {
@@ -48,5 +50,13 @@ class MainController extends Controller
         $category = Category::where('slug', $slug)->first();
 
         return view('category', compact('category'));
+    }
+
+    public function subscripe(Request $request, Product $product)
+    {
+        $email = Auth::check() ? Auth::user()->email : $request->email;
+        Subscription::create(['email' => $email, 'product_id' => $product->id]);
+
+        return redirect()->back()->with('success',  "Спасибо, мы сообщим вам когда продукт $product->name будет в наличии");
     }
 }

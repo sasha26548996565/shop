@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/categories', 'MainController@categories')->name('categories');
     Route::get('/{category}', 'MainController@category')->name('category');
     Route::get('/{category}/{productS}', 'MainController@product')->name('product');
+    Route::post('subscription/{product}', 'MainController@subscripe')->name('subscription');
 
     //Route::middleware('reset')->get('/reset/fghfgh/fghfg/hfg/hf/gh/fgh/gf', 'ResetController')->name('reset');
 });
