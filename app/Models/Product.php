@@ -27,26 +27,26 @@ class Product extends Model
         return $this->price * $count;
     }
 
-    public function hit(): Attribute
-    {
-        return Attribute::make(
-            set: fn($value) => $value == "on" ? 1 : 0
-        );
-    }
+    // public function hit(): Attribute
+    // {
+    //     return Attribute::make(
+    //         set: fn($value) => $value == "on" ? 1 : 0
+    //     );
+    // }
 
-    public function recommend(): Attribute
-    {
-        return Attribute::make(
-            set: fn($value) => $value == "on" ? 1 : 0
-        );
-    }
+    // public function recommend(): Attribute
+    // {
+    //     return Attribute::make(
+    //         set: fn($value) => $value == "on" ? 1 : 0
+    //     );
+    // }
 
-    public function newest(): Attribute
-    {
-        return Attribute::make(
-            set: fn($value) => $value == "on" ? 1 : 0
-        );
-    }
+    // public function newest(): Attribute
+    // {
+    //     return Attribute::make(
+    //         set: fn($value) => $value == "on" ? 1 : 0
+    //     );
+    // }
 
     public function getLabels(): array
     {
@@ -62,17 +62,27 @@ class Product extends Model
         return $this[$labelName] == 1;
     }
 
-    public function disableLabel(array $params): array
-    {
-        foreach ($this->getLabels() as $field => $name)
-        {
-            if (! isset($params[$field]))
-            {
-                $params[$field] = 0;
-            }
-        }
+    // public function disableLabel(array $params): array
+    // {
+    //     foreach ($this->getLabels() as $field => $name)
+    //     {
+    //         if (! isset($params[$field]))
+    //         {
+    //             $params[$field] = 0;
+    //         }
+    //     }
 
-        return $params;
+    //     return $params;
+    // }
+
+    public function enableLabel(string $label): void
+    {
+        $this->$label = 1;
+    }
+
+    public function disableLabel(string $label): void
+    {
+        $this->$label = 0;
     }
 
     public function isAvailable(): bool

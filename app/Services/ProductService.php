@@ -47,8 +47,6 @@ class ProductService
                 $data['image'] = Storage::disk('public')->put('/products', $data['image']);
             }
 
-            $data = $product->disableLabel($data);
-
             $product->update($data);
 
             DB::commit();
