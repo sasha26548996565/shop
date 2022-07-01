@@ -41,8 +41,8 @@
                                     </form>
                                 </div>
                             </td>
-                            <td>{{ $product->price }}</td>
-                            <td>{{ $product->getTotalPrice($product->pivot->count) }}</td>
+                            <td>{{ $product->price }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
+                            <td>{{ $product->getTotalPrice($product->pivot->count) }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
                         </tr>
                     @endforeach
                 @else
@@ -53,7 +53,7 @@
                 <tr>
                     <td colspan="3">Общая стоимость:</td>
                     @isset ($order)
-                        <td>{{ $order->getFullSum() }}</td>
+                        <td>{{ $order->getFullSum() }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
                     @endisset
                 </tr>
             </tbody>

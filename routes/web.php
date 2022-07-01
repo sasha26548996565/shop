@@ -13,6 +13,7 @@ Auth::routes([
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/locale/{locale}', 'LocalizableController@switchLocale')->name('changeLocale');
+    Route::get('/switchCurrency/{currencyCode}', 'CurrencyController@switchcurrency')->name('switchCurrency');
 
     Route::middleware(['locale'])->group(function () {
         Route::middleware('auth')->prefix('person')->name('person.')->namespace('Person')->group(function () {

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Traits\Filterable;
 use App\Models\Traits\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\CurrencyConvertionService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -35,6 +36,13 @@ class Product extends Model
             'newest' => 'Новинка',
             'recommend' => 'Рекомендованные'
         ];
+    }
+
+    public function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => CurrencyConvertionService::convert($value)
+        );
     }
 
     public function issetLabel(string $labelName): bool

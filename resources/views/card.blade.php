@@ -11,7 +11,7 @@
 
             <h3>{{ $product->__('name') }}</h3>
             <p>Осталось: {{ $product->count }}</p>
-            <p>{{ $product->price }} RUB</p>
+            <p>{{ $product->price }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</p>
             <p>
 
             @if ($product->isAvailable())
