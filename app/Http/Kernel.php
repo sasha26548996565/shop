@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\CheckUserRoleMiddleware::class,
         'basket_not_empty' => \App\Http\Middleware\CheckBasketMiddleware::class,
 
-        'reset' => \App\Http\Middleware\CanResetProjectMiddleware::class
+        'reset' => \App\Http\Middleware\CanResetProjectMiddleware::class,
+        'locale' => \App\Http\Middleware\LocaleMiddleware::class
     ];
 }

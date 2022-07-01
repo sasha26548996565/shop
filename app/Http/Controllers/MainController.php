@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SubscriptionRequest;
 use App\Http\Requests\ProductFilterRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\App;
 
 class MainController extends Controller
 {
