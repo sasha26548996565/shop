@@ -36,7 +36,7 @@
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false">{{ App\Models\Currency::byCode(session('currency', 'RUB'))->first()->symbol }}
+                            aria-expanded="false">{{ App\Services\CurrencyConvertionService::getCurrencySymbol()  }}
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             @foreach (App\Services\CurrencyConvertionService::getCurrencies() as $currency)

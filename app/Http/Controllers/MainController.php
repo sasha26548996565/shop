@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SubscriptionRequest;
 use App\Http\Requests\ProductFilterRequest;
+use App\Services\CurrencyRatesService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 
@@ -27,6 +28,8 @@ class MainController extends Controller
 
     public function index(ProductFilterRequest $request): View
     {
+        CurrencyRatesService::getRates();
+
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($request->validated())]);
         $products = Product::with('category')->filter($filter)->latest()->paginate(10);
 

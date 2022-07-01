@@ -36,7 +36,7 @@ class CurrencyConvertionService
 
         $targetCurrency = self::$container[$targetCurrencyCode];
 
-        return round($sum * $originCurrency->rate / $targetCurrency->rate, 2);
+        return round($sum / $originCurrency->rate * $targetCurrency->rate, 2);
     }
 
     public static function getCurrencySymbol(): string
@@ -50,6 +50,21 @@ class CurrencyConvertionService
 
     public static function getCurrencies(): array
     {
+        self::loadContainer();
+
         return self::$container;
+    }
+
+    public static function getBaseCurrencyCode()
+    {
+        self::loadContainer();
+
+        foreach (self::$container as $code => $currency)
+        {
+            if ($currency->is_main)
+            {
+                return $currency;
+            }
+        }
     }
 }

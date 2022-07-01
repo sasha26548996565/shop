@@ -10,9 +10,16 @@ class Currency extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function scopeByCode($query, string $code): Builder
     {
         //dd($query);
         return $query->where('code', $code);
+    }
+
+    public function isMain(): bool
+    {
+        return $this->is_main;
     }
 }
