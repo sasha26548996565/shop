@@ -25,6 +25,8 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'name_en' => 'required',
+            'description_en' => 'required',
             'slug' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',

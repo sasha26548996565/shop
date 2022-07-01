@@ -43,7 +43,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
         });
 
         Route::get('/categories', 'MainController@categories')->name('categories');
-        Route::get('/{category}', 'MainController@category')->name('category');
+        Route::get('/categories/{category}', 'MainController@category')->name('category');
         Route::get('/{category}/{productS}', 'MainController@product')->name('product');
         Route::post('subscription/{product}', 'MainController@subscripe')->name('subscription');
     });

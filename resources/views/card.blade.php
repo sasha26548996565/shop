@@ -9,7 +9,7 @@
                 @endif
             @endforeach
 
-            <h3>{{ $product->name }}</h3>
+            <h3>{{ $product->__('name') }}</h3>
             <p>Осталось: {{ $product->count }}</p>
             <p>{{ $product->price }} RUB</p>
             <p>
@@ -24,7 +24,7 @@
                 Нет на складе<br>
             @endif
 
-            {{ $product->category->name }}
+            {{ $product->category->__('name') }}
 
             <a href="{{ route('product', [$product->category->slug, $product->slug]) }}"
                 class="btn btn-default">подробнее</a>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Traits\Filterable;
+use App\Models\Traits\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory, Filterable, SoftDeletes;
+    use HasFactory, Filterable, SoftDeletes, Translatable;
 
     protected $guarded = [];
 
@@ -26,27 +27,6 @@ class Product extends Model
     {
         return $this->price * $count;
     }
-
-    // public function hit(): Attribute
-    // {
-    //     return Attribute::make(
-    //         set: fn($value) => $value == "on" ? 1 : 0
-    //     );
-    // }
-
-    // public function recommend(): Attribute
-    // {
-    //     return Attribute::make(
-    //         set: fn($value) => $value == "on" ? 1 : 0
-    //     );
-    // }
-
-    // public function newest(): Attribute
-    // {
-    //     return Attribute::make(
-    //         set: fn($value) => $value == "on" ? 1 : 0
-    //     );
-    // }
 
     public function getLabels(): array
     {
@@ -61,19 +41,6 @@ class Product extends Model
     {
         return $this[$labelName] == 1;
     }
-
-    // public function disableLabel(array $params): array
-    // {
-    //     foreach ($this->getLabels() as $field => $name)
-    //     {
-    //         if (! isset($params[$field]))
-    //         {
-    //             $params[$field] = 0;
-    //         }
-    //     }
-
-    //     return $params;
-    // }
 
     public function enableLabel(string $label): void
     {
