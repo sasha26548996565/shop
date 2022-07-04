@@ -6,28 +6,46 @@ use GuzzleHttp\Client;
 
 class CurrencyRatesService
 {
-    public static function getRates()
-    {
-        $base_currency = CurrencyConvertionService::getBaseCurrencyCode();
-        $url = config('currency_rates.api_url') . $base_currency->code;
+    private Client $client;
 
-        $client = new Client();
-        $response = $client->request('GET', $url);
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
+    public function updateRates(): void
+    {
+        $url = $this->getUrl();
+
+        $response = $this->client->request('GET', $url);
 
         if ($response->getStatusCode() != 200)
             throw new \Exception('There is problem with currency rate');
 
         $rates = json_decode($response->getBody()->getContents(), true)['data'];
 
+        $this->setRates($rates);
+    }
+
+    private function setRates($rates): void
+    {
         foreach (CurrencyConvertionService::getCurrencies() as $currency)
         {
             if (! $currency->isMain())
             {
-                if (! isset($rates[$currency->code]))
-                    throw new \Exception('There is problem with currency rate');
-                else
+                if (isset($rates[$currency->code]))
                     $currency->update(['rate' => $rates[$currency->code]]);
+                else
+                    throw new \Exception('There is problem with currency rate');
             }
         }
+    }
+
+    private function getUrl(): string
+    {
+        $base_currency = CurrencyConvertionService::getBaseCurrencyCode();
+        $url = config('currency_rates.api_url') . $base_currency->code;
+
+        return $url;
     }
 }

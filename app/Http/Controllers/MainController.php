@@ -19,16 +19,18 @@ use Illuminate\Support\Facades\App;
 
 class MainController extends Controller
 {
+    private CurrencyRatesService $currencyRatesService;
     private Product $product;
 
-    public function __construct(Product $product)
+    public function __construct(Product $product, CurrencyRatesService $currencyRatesService)
     {
+        $this->currencyRatesService = $currencyRatesService;
         $this->product = $product;
     }
 
     public function index(ProductFilterRequest $request): View
     {
-        CurrencyRatesService::getRates();
+        $this->currencyRatesService->updateRates();
 
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($request->validated())]);
         $products = Product::with('category')->filter($filter)->latest()->paginate(10);
