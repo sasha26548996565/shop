@@ -23,7 +23,7 @@ class OrderCreateJob implements ShouldQueue
         $this->email = $email;
     }
 
-    public function handle()
+    public function handle(): void
     {
         Mail::to($this->email)->send(new OrderCreatedMail());
     }
