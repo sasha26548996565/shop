@@ -24,9 +24,22 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
+    public function order(): Relation
+    {
+        return $this->belongsTo(Order::class);
+    }
+
     public function getTotalPrice(int $count): float
     {
         return $this->price * $count;
+    }
+
+    public function getPriceForCount(): float
+    {
+        if (is_null($this->pivot))
+            return $this->price;
+
+        return $this->pivot->count * $this->price;
     }
 
     public function getLabels(): array

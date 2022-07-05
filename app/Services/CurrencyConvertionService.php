@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Currency;
+use App\Services\CurrencyRatesService;
 
 class CurrencyConvertionService
 {
+    private const DEFAULT_CURRENCY_CODE = 'RUB';
+
+    private static CurrencyRatesService $currencyRates;
     private static $container;
+
+    public function __construct(CurrencyRatesService $currencyRates)
+    {
+        self::$currencyRates = $currencyRates;
+    }
 
     public static function loadContainer(): void
     {
@@ -23,18 +33,35 @@ class CurrencyConvertionService
         }
     }
 
-    public static function convert(float $sum, string $originCurrencyCode = 'RUB', ?string $targetCurrencyCode = null): float
+    public static function convert(float $sum, string $originCurrencyCode = self::DEFAULT_CURRENCY_CODE, ?string $targetCurrencyCode = null): float
     {
         self::loadContainer();
 
         $originCurrency = self::$container[$originCurrencyCode];
 
+        if ($originCurrency->code != self::DEFAULT_CURRENCY_CODE)
+        {
+            if ($originCurrency->rate == 0 || $originCurrency->updated_at->startOfDay() != Carbon::now()->startOfDay())
+            {
+                self::$currencyRates->updateRates();
+                self::loadContainer();
+                $originCurrency = self::$container[$originCurrencyCode];
+            }
+        }
+
         if (is_null($targetCurrencyCode))
         {
-            $targetCurrencyCode = session('currency', 'RUB');
+            $targetCurrencyCode = self::getCurrencyFromSession();
         }
 
         $targetCurrency = self::$container[$targetCurrencyCode];
+
+        if ($targetCurrency->rate == 0 || $targetCurrency->updated_at->startOfDay() != Carbon::now()->startOfDay())
+        {
+            self::$currencyRates->updateRates();
+            self::loadContainer();
+            $targetCurrency = self::$container[$targetCurrency];
+        }
 
         return round($sum / $originCurrency->rate * $targetCurrency->rate, 2);
     }
@@ -43,7 +70,7 @@ class CurrencyConvertionService
     {
         self::loadContainer();
 
-        $currency = self::$container[session('currency', 'RUB')];
+        $currency = self::$container[self::getCurrencyFromSession()];
 
         return $currency->symbol;
     }
@@ -62,6 +89,24 @@ class CurrencyConvertionService
         foreach (self::$container as $code => $currency)
         {
             if ($currency->is_main)
+            {
+                return $currency;
+            }
+        }
+    }
+
+    public static function getCurrencyFromSession()
+    {
+        return session('currency', self::DEFAULT_CURRENCY_CODE);
+    }
+
+    public static function getCurrentCurrencyFromSession()
+    {
+        self::loadContainer();
+
+        foreach (self::$container as $currency)
+        {
+            if ($currency->code == self::getCurrencyFromSession());
             {
                 return $currency;
             }

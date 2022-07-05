@@ -10,13 +10,14 @@ class CheckBasketMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $orderId = session('orderId');
+        $order = session('order');
 
-        if (is_null($orderId) && Order::getFullSum() < 0)
+        if (! is_null($order) && $order->getFullSum() > 0)
         {
-            return redirect()->back();
+            return $next($request);
         }
 
-        return $next($request);
+        session()->forget('order');
+        return to_route('index');
     }
 }

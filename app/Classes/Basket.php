@@ -8,6 +8,7 @@ use App\Jobs\OrderCreateJob;
 use App\Models\Order;
 use App\Models\Product;
 use App\Mail\OrderCreatedMail;
+use App\Services\CurrencyConvertionService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -35,45 +36,45 @@ class Basket
 
         dispatch(new OrderCreateJob($email));
 
-        return $this->order->saveOrder($name, $phone, $email);
+        return $this->order->saveOrder($name, $phone);
     }
 
     public function countAvailable(bool $updateCount = false)
     {
-        foreach ($this->order->products as $product)
+        $products = collect([]);
+
+        foreach ($this->order->products as $orderProduct)
         {
-            if ($product->count < $this->getPivotRow($product->id)->count)
-            {
+            $pivotRow = $this->order->products->where('id', $orderProduct->id)->first();
+            $product = Product::findOrFail($orderProduct->id);
+
+            if ($pivotRow->countInOrder > $product->count)
                 return false;
-            }
 
             if ($updateCount)
             {
-                $product->count -= $this->getPivotRow($product->id)->count;
+                $orderProduct->count -= $orderProduct->countInOrder;
+                $products->push($product);
             }
         }
 
         if ($updateCount)
-        {
-            $this->order->products->map->save();
-        }
+            $products->map->save();
 
         return true;
     }
 
     public function addProduct(Product $product): bool
     {
-        if ($this->order->products->contains($product->id))
+        if ($this->order->products->contains($product))
         {
-            $pivotRow = $this->getPivotRow($product->id);
-            $pivotRow->count++;
-
-            if ($pivotRow->count > $product->count)
+            $pivotRow = $this->order->products->where('id', $product->id)->first();
+            if ($pivotRow->countInOrder >= $product->count)
             {
                 return false;
             }
 
-            $pivotRow->update();
+            $pivotRow->countInOrder++;
         } else
         {
             if ($product->count == 0)
@@ -81,57 +82,43 @@ class Basket
                 return false;
             }
 
-            $this->order->products()->attach($product->id);
+            $product->countInOrder = 1;
+            $this->order->products->push($product);
         }
 
         $product = Product::findOrFail($product->id);
-
-        Order::changeFullSum($product->price);
 
         return true;
     }
 
     public function removeProduct(Product $product): bool
     {
-        if ($this->order->products->contains($product->id))
-        {
-            $pivotRow = $this->getPivotRow($product->id);
+        if ($this->order->products->contains($product) == false)
+            return false;
 
-            if ($pivotRow->count < 2)
-            {
-                $this->order->products()->detach($product->id);
-            } else
-            {
-                $pivotRow->count--;
-                $pivotRow->update();
-            }
+        $pivotRow = $this->order->products->where('id', $product->id)->first();
 
-            Order::changeFullSum(-$product->price);
+        if ($pivotRow->countInOrder < 2)
+            $this->order->products->pop($product->id);
+        else
+            $pivotRow->countInOrder--;
 
-            return true;
-        }
-
-        return false;
-    }
-
-    private function getPivotRow(int $productId): Pivot
-    {
-        return $this->order->products()->where('product_id', $productId)->first()->pivot;
+        return true;
     }
 
     private function setOrder(): Order
     {
-        $orderId = session('orderId');
+        $orderFromSession = session('order');
 
-        if (is_null($orderId))
+        if (is_null($orderFromSession))
         {
-            $this->order = Order::create(['user_id' => Auth::check() ? Auth::id() : null]);
-            session(['orderId' => $this->order->id]);
+            $order = new Order();
+            session(['order' => $order]);
         } else
         {
-            $this->order = Order::findOr($orderId, fn () => abort(404));
+            $order = $orderFromSession;
         }
 
-        return $this->order;
+        return $order;
     }
 }

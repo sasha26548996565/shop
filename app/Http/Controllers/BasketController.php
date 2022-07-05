@@ -65,8 +65,6 @@ class BasketController extends Controller
         session()->flash($result ? 'success' : 'error',
             $result ? 'ваш заказ принят в обработку' : 'ваш заказ не принят в обработку, возникла ошибка');
 
-        Order::eraseSum();
-
         return to_route('index');
     }
 }

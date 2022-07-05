@@ -29,13 +29,14 @@
                                         {{ $product->name }}
                                     </a>
                                 </td>
-                                <td>{{ $product->price }}</td>
-                                <td>{{ $product->getTotalPrice($product->pivot->count) }}</td>
+                                <td>{{ $product->pivot->count }}</td>
+                                <td>{{ $product->price }} {{ $order->currency->symbol }}</td>
+                                <td>{{ $product->getPriceForCount($product->pivot->count) }} {{ $order->currency->symbol }}</td>
                             </tr>
                         @endforeach
                         <tr>
                             <td colspan="3">Общая стоимость:</td>
-                            <td>{{ $order->getFullPrice() }}</td>
+                            <td>{{ $order->sum }} {{ $order->currency->symbol }}</td>
                         </tr>
 
                         </tbody>
