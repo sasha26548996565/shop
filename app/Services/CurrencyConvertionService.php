@@ -7,6 +7,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Models\Currency;
 use App\Services\CurrencyRatesService;
+use GuzzleHttp\Client;
 
 class CurrencyConvertionService
 {
@@ -14,11 +15,6 @@ class CurrencyConvertionService
 
     private static CurrencyRatesService $currencyRates;
     private static $container;
-
-    public function __construct(CurrencyRatesService $currencyRates)
-    {
-        self::$currencyRates = $currencyRates;
-    }
 
     public static function loadContainer(): void
     {
@@ -31,6 +27,9 @@ class CurrencyConvertionService
                 self::$container[$currency->code] = $currency;
             }
         }
+
+        $client = new Client();
+        self::$currencyRates = new CurrencyRatesService(new Client());
     }
 
     public static function convert(float $sum, string $originCurrencyCode = self::DEFAULT_CURRENCY_CODE, ?string $targetCurrencyCode = null): float
@@ -39,29 +38,12 @@ class CurrencyConvertionService
 
         $originCurrency = self::$container[$originCurrencyCode];
 
-        if ($originCurrency->code != self::DEFAULT_CURRENCY_CODE)
-        {
-            if ($originCurrency->rate == 0 || $originCurrency->updated_at->startOfDay() != Carbon::now()->startOfDay())
-            {
-                self::$currencyRates->updateRates();
-                self::loadContainer();
-                $originCurrency = self::$container[$originCurrencyCode];
-            }
-        }
-
         if (is_null($targetCurrencyCode))
         {
             $targetCurrencyCode = self::getCurrencyFromSession();
         }
 
         $targetCurrency = self::$container[$targetCurrencyCode];
-
-        if ($targetCurrency->rate == 0 || $targetCurrency->updated_at->startOfDay() != Carbon::now()->startOfDay())
-        {
-            self::$currencyRates->updateRates();
-            self::loadContainer();
-            $targetCurrency = self::$container[$targetCurrency];
-        }
 
         return round($sum / $originCurrency->rate * $targetCurrency->rate, 2);
     }

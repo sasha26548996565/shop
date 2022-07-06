@@ -30,8 +30,6 @@ class MainController extends Controller
 
     public function index(ProductFilterRequest $request): View
     {
-        $this->currencyRatesService->updateRates();
-
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($request->validated())]);
         $products = Product::with('category')->filter($filter)->latest()->paginate(10);
 

@@ -6,18 +6,12 @@ use GuzzleHttp\Client;
 
 class CurrencyRatesService
 {
-    private Client $client;
-
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     public function updateRates(): void
     {
         $url = $this->getUrl();
 
-        $response = $this->client->request('GET', $url);
+        $client = new Client();
+        $response = $client->request('GET', $url);
 
         if ($response->getStatusCode() != 200)
             throw new \Exception('There is problem with currency rate');
