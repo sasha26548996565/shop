@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Product;
@@ -16,9 +18,7 @@ class ProductService
         try
         {
             if (isset($data['image']))
-            {
                 $data['image'] = Storage::disk('public')->put('/products', $data['image']);
-            }
 
             $product = Product::create($data);
 
@@ -41,9 +41,7 @@ class ProductService
             if (isset($data['image']))
             {
                 if (isset($product->image))
-                {
                     Storage::delete($product->image);
-                }
 
                 $data['image'] = Storage::disk('public')->put('/products', $data['image']);
             }
