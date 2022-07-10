@@ -16,7 +16,7 @@ class PropertyOption extends Model
 
     public function property(): Relation
     {
-        return $this->belongsTo(Property::class, 'propery_id', 'id');
+        return $this->belongsTo(Property::class, 'property_id', 'id');
     }
 
     public function skus(): Relation

@@ -24,11 +24,13 @@
                     <td>{{ $property->name }}</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <form action="{{ route('admin.categories.destroy', $property->id) }}" method="POST">
+                            <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST">
                                 <a class="btn btn-success" type="button" href="{{ route('admin.properties.show', $property->id) }}"
                                     >Открыть</a>
                                 <a class="btn btn-warning" type="button" href="{{ route('admin.properties.edit', $property->id) }}"
                                     >Редактировать</a>
+                                <a class="btn btn-primary" type="button" href="{{ route('admin.property-options.index', [$property->id]) }}"
+                                        >Варианты свойств</a>
                                 @csrf
                                 @method('DELETE')
                                 <input class="btn btn-danger" type="submit" value="Удалить"></form>
