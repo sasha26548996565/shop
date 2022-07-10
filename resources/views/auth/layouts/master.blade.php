@@ -33,7 +33,7 @@
                     @if (auth()->check() && auth()->user()->isAdmin())
                         <li><a href="{{ route('admin.categories.index') }}">Категории</a></li>
                         <li><a href="{{ route('admin.products.index') }}">Товары</a>
-                        <li><a href="">Свойства</a>
+                        <li><a href="{{ route('admin.properties.index') }}">Свойства</a>
                         <li><a href="">Купоны</a>
                         <li><a href="">Поставщики</a>
                         </li>

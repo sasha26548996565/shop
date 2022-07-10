@@ -29,6 +29,16 @@ class Product extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function skus(): Relation
+    {
+        return $this->hasMany(Sku::class, 'sku_id', 'id');
+    }
+
+    public function properties(): Relation
+    {
+        return $this->belongsToMany(Property::class, 'property_product', 'property_id', 'product_id');
+    }
+
     public function getTotalPrice(int $count): float
     {
         return $this->price * $count;
