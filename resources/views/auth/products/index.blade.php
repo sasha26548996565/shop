@@ -18,7 +18,7 @@
                     Название
                 </th>
                 <th>
-                    Осталось
+                    Кол-во товарных предложений
                 </th>
                 <th>
                     Действия
@@ -29,7 +29,7 @@
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->slug }}</td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ $product->count }}</td>
+                    <td></td>
                     <td>
                         <div class="btn-group" role="group">
                             <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST">
@@ -37,6 +37,8 @@
                                     >Открыть</a>
                                 <a class="btn btn-warning" type="button" href="{{ route('admin.products.edit', $product->id) }}"
                                     >Редактировать</a>
+                                <a class="btn btn-primary" type="button" href="{{ route('admin.skus.index', $product->id) }}"
+                                        >Sku</a>
                                 @csrf
                                 @method('DELETE')
                                 <input class="btn btn-danger" type="submit" value="Удалить"></form>

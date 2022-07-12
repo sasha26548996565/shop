@@ -16,7 +16,7 @@ class Property extends Model
 
     public function propertyOptions(): Relation
     {
-        return $this->hasMany(PropertyOption::class, 'propery_id', 'id');
+        return $this->hasMany(PropertyOption::class, 'property_id', 'id');
     }
 
     public function products(): Relation

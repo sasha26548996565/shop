@@ -13,11 +13,11 @@ class CategorySeeder extends Seeder
     public function __construct()
     {
         $this->categories = [
-            ['name' => 'Мобильная техника', 'slug' => 'Mobile', 'description' => 'Категория мобильной техники',
+            ['name' => 'Мобильная техника', 'name_en' => '.', 'description_en' => '.', 'slug' => 'Mobile', 'description' => 'Категория мобильной техники',
                 'image' => 'categories/mobile.png'],
-            ['name' => 'Бытовая техника', 'slug' => 'appliances', 'description' => 'Категория бытовой техники',
+            ['name' => 'Бытовая техника', 'name_en' => '.', 'description_en' => '.', 'slug' => 'appliances', 'description' => 'Категория бытовой техники',
                 'image' => 'categories/appliances.png'],
-            ['name' => 'Портативная техника', 'slug' => 'portable', 'description' => 'Категория портативной техники',
+            ['name' => 'Портативная техника', 'name_en' => '.', 'description_en' => '.', 'slug' => 'portable', 'description' => 'Категория портативной техники',
                 'image' => 'categories/portable.png']
         ];
     }

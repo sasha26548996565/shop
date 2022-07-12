@@ -11,18 +11,8 @@
 
             <h3>{{ $product->__('name') }}</h3>
             <p>Осталось: {{ $product->count }}</p>
-            <p>{{ $product->price }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</p>
+            <p>{{ $product->price }} </p>
             <p>
-
-            @if ($product->isAvailable())
-                <form action="{{ route('basket-add', $product->id) }}" method="POST">
-                    @csrf
-
-                    <input type="submit" class="btn btn-primary" value="корзина">
-                </form>
-            @else
-                Нет на складе<br>
-            @endif
 
             {{ $product->category->__('name') }}
 

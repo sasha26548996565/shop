@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('sku_property_option', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('property_option_id')->constrained();
-            $table->foreignId('sku_id')->constrained();
+            $table->foreignId('property_option_id')->constrained()->onDelete('cascade');
+            $table->foreignId('sku_id')->constrained()->onDelete('cascade');
 
             $table->timestamps();
         });

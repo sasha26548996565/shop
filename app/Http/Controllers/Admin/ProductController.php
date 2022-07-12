@@ -6,12 +6,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Property;
+use App\Services\ProductService;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Admin\Product\StoreRequest;
 use App\Http\Requests\Admin\Product\UpdateRequest;
-use App\Services\ProductService;
 
 class ProductController extends Controller
 {
@@ -39,31 +40,33 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = Category::latest()->get();
+        $properties = Property::latest()->get();
         $labels = $this->product->getLabels();
 
-        return view('auth.products.form', compact('categories', 'labels'));
+        return view('auth.products.form', compact('categories', 'labels', 'properties'));
     }
 
     public function store(StoreRequest $request): RedirectResponse
     {
         $product = $this->service->store($request->validated());
 
-        return to_route('admin.products.show', ['product' => $product->id]);
+        return to_route('admin.products.show', $product->id);
     }
 
     public function edit(Product $product): View
     {
         $categories = Category::latest()->get();
+        $properties = Property::latest()->get();
         $labels = $this->product->getLabels();
 
-        return view('auth.products.form', compact('categories', 'product', 'labels'));
+        return view('auth.products.form', compact('categories', 'product', 'labels', 'properties'));
     }
 
     public function update(UpdateRequest $request, Product $product): RedirectResponse
     {
         $product = $this->service->update($request->validated(), $product);
 
-        return to_route('admin.products.show', ['product' => $product->id]);
+        return to_route('admin.products.show', $product->id);
     }
 
     public function destroy(Product $product): RedirectResponse

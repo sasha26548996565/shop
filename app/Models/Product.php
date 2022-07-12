@@ -36,7 +36,7 @@ class Product extends Model
 
     public function properties(): Relation
     {
-        return $this->belongsToMany(Property::class, 'property_product', 'property_id', 'product_id');
+        return $this->belongsToMany(Property::class, 'property_product', 'product_id', 'property_id')->withTimestamps();
     }
 
     public function getTotalPrice(int $count): float
@@ -61,12 +61,7 @@ class Product extends Model
         ];
     }
 
-    public function price(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => CurrencyConvertionService::convert($value)
-        );
-    }
+
 
     public function issetLabel(string $labelName): bool
     {

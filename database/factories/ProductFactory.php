@@ -19,9 +19,10 @@ class ProductFactory extends Factory
     {
         return [
             'name' => 'iphoneX',
+            'name_en' => 'iphoneX',
             'slug' => 'iphoneX',
             'description' => 'good phone',
-            'price' => 70000,
+            'description_en' => 'good phone',
             'image' => 'products/iphoneX.png',
             'category_id' => Category::where('id', 1)->first()->id
         ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Product;
+namespace App\Http\Requests\Admin\Sku;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,17 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'name_en' => 'required',
-            'description_en' => 'required',
-            'slug' => 'required',
-            'description' => 'required',
-            'image' => '',
-            'category_id' => 'required',
-            'property_ids' => '',
-            'hit' => '',
-            'recommend' => '',
-            'newest' => ''
+            'price' => 'required|numeric|min:0',
+            'count' => 'required|numeric|min:0',
+            'property_ids' => ''
         ];
     }
 }

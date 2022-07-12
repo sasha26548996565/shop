@@ -19,12 +19,10 @@ use Illuminate\Support\Facades\App;
 
 class MainController extends Controller
 {
-    private CurrencyRatesService $currencyRatesService;
     private Product $product;
 
-    public function __construct(Product $product, CurrencyRatesService $currencyRatesService)
+    public function __construct(Product $product)
     {
-        $this->currencyRatesService = $currencyRatesService;
         $this->product = $product;
     }
 

@@ -13,15 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('property_options', function (Blueprint $table) {
-            $table->id();
-
-            $table->foreignId('property_id')->contrained()->onDelete('cascade');
-            $table->string('name');
-            $table->string('name_en');
-            $table->softDeletes();
-
-            $table->timestamps();
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('count');
         });
     }
 
@@ -32,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('property_options');
+        Schema::table('products', function (Blueprint $table) {
+            $table->unsignedInteger('count')->default(0);
+        });
     }
 };

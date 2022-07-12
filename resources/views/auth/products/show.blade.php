@@ -32,14 +32,6 @@
                 <td>{{ $product->name_en }}</td>
             </tr>
             <tr>
-                <td>Цена</td>
-                <td>{{ $product->price }}</td>
-            </tr>
-            <tr>
-                <td>Осталось</td>
-                <td>{{ $product->count }}</td>
-            </tr>
-            <tr>
                 <td>Описание</td>
                 <td>{{ $product->description }}</td>
             </tr>

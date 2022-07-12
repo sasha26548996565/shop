@@ -11,51 +11,65 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
-    public function store(array $data): Product
+    public function store(array $params): Product
     {
         DB::beginTransaction();
 
         try
         {
-            if (isset($data['image']))
-                $data['image'] = Storage::disk('public')->put('/products', $data['image']);
+            if (isset($params['image']))
+                $params['image'] = Storage::disk('public')->put('/products', $params['image']);
 
-            $product = Product::create($data);
+            if (isset($params['property_ids']))
+            {
+                $propertyIds = $params['property_ids'];
+                unset($params['property_ids']);
+            }
+
+            $product = Product::create($params);
+
+            if (isset($propertyIds))
+            {
+                $product->properties()->sync($propertyIds);
+            }
 
             DB::commit();
+
+            return $product;
         } catch (\Exception $exception)
         {
             DB::rollback();
             abort(500);
         }
-
-        return $product;
     }
 
-    public function update(array $data, Product $product): Product
+    public function update(array $params, Product $product): Product
     {
         DB::beginTransaction();
 
         try
         {
-            if (isset($data['image']))
+            if (isset($params['image']))
             {
                 if (isset($product->image))
                     Storage::delete($product->image);
 
-                $data['image'] = Storage::disk('public')->put('/products', $data['image']);
+                $params['image'] = Storage::disk('public')->put('/products', $params['image']);
             }
 
+            $product->properties()->sync($params['property_ids']);
+            unset($params['property_ids']);
+
             event(new ProductUpdated($product));
-            $product->update($data);
+            $product->update($params);
 
             DB::commit();
+
+            return $product;
         } catch (\Exception $exception)
         {
             DB::rollback();
             abort(500);
         }
-
-        return $product;
     }
 }
