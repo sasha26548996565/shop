@@ -68,4 +68,11 @@
             </div>
         </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('#property_id option').on('mousedown', function (e) {
+            this.selected = !this.selected;
+            e.preventDefault();
+        });
+    </script>
 @endsection

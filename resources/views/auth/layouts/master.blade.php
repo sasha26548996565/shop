@@ -18,6 +18,7 @@
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/admin.css" rel="stylesheet">
+    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
 </head>
 <body>
 <div id="app">
