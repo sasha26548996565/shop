@@ -41,6 +41,7 @@ class SkuService
 
             $sku->update($params->toArray());
             $sku->propertyOptions()?->sync($propertyIds);
+
             DB::commit();
         } catch (\Exception $exception)
         {
