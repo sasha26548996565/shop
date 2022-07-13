@@ -14,10 +14,10 @@
             <h1>Добавить sku</h1>
         @endisset
         <form method="POST"
-              @isset($sku)
-              action="{{ route('admin.skus.update', [$product->id, $sku->id]) }}"
-              @else
-              action="{{ route('admin.skus.store', $product->id) }}"
+            @isset($sku)
+                action="{{ route('admin.skus.update', [$product->id, $sku->id]) }}"
+            @else
+                action="{{ route('admin.skus.store', $product->id) }}"
             @endisset>
 
             <div>
@@ -52,6 +52,7 @@
                         <div class="col-sm-6">
                             @include('auth.layouts.error', ['fieldName' => 'property_id'])
                             <select name="property_ids[{{ $property->id }}]" id="property_id" class="form-control">
+                                <option disabled selected>change</option>
                                 @foreach($property->propertyOptions as $propertyOption)
                                     <option value="{{ $propertyOption->id }}"
                                         @selected(isset($sku) && $sku->propertyOptions->contains($propertyOption->id))

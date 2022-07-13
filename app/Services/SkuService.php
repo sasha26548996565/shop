@@ -5,38 +5,25 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Sku;
+use Illuminate\Support\Collection;
 
 class SkuService
 {
-    public function store(array $params): void
+    public function store(Collection $params): void
     {
-        if (isset($params['property_ids']))
-        {
-            $propertyIds = $params['property_ids'];
-            unset($params['property_ids']);
-        }
+        $propertyIds = $params->get('property_ids' ?? null);
+        $params->forget('property_ids' ?? null);
 
-        $sku = Sku::create($params);
-
-        if (isset($propertyIds))
-        {
-            $sku->propertyOptions()->sync($propertyIds);
-        }
+        $sku = Sku::create($params->toArray());
+        $sku->propertyOptions()?->sync($propertyIds);
     }
 
-    public function update(array $params, Sku $sku): void
+    public function update(Collection $params, Sku $sku): void
     {
-        if (isset($params['property_ids']))
-        {
-            $propertyIds = $params['property_ids'];
-            unset($params['property_ids']);
-        }
+        $propertyIds = $params->get('property_ids' ?? null);
+        $params->forget('property_ids' ?? null);
 
-        $sku->update($params);
-
-        if (isset($propertyIds))
-        {
-            $sku->propertyOptions()->sync($propertyIds);
-        }
+        $sku->update($params->toArray());
+        $sku->propertyOptions()?->sync($propertyIds);
     }
 }

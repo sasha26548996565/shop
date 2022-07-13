@@ -34,8 +34,8 @@ class SkuController extends Controller
 
     public function store(StoreRequest $request, Product $product): RedirectResponse
     {
-        $params = $request->validated();
-        $params['product_id'] = $product->id;
+        $params = collect($request->validated());
+        $params->put('product_id', $product->id);
 
         $this->skuService->store($params);
 
@@ -54,8 +54,8 @@ class SkuController extends Controller
 
     public function update(UpdateRequest $request, Product $product, Sku $sku): RedirectResponse
     {
-        $params = $request->validated();
-        $params['product_id'] = $product->id;
+        $params = collect($request->validated());
+        $params->put('product_id', $product->id);
 
         $this->skuService->update($params, $sku);
 
