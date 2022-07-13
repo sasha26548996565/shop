@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes([
     'reset' => false,
     'confirm' => false,
-    'verify' => false
+    'verify' => true
 ]);
 
 Route::namespace('App\Http\Controllers')->group(function () {
@@ -21,7 +21,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
             Route::get('/order/{order}', 'OrderController@show')->name('order.show');
         });
 
-        Route::namespace('Admin')->middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::namespace('Admin')->middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.')->group(function () {
 
             Route::get('/order', 'OrderController@index')->name('order');
             Route::get('/order/{order}', 'OrderController@show')->name('order.show');
