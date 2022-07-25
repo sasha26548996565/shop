@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Events\ProductUpdated;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -43,7 +44,7 @@ class ProductService
         }
     }
 
-    public function update(array $params, Product $product): Product
+    public function update(Collection $params, Product $product): Product
     {
         DB::beginTransaction();
 
@@ -57,10 +58,8 @@ class ProductService
                 $params['image'] = Storage::disk('public')->put('/products', $params['image']);
             }
 
-            $product->properties()->sync($params['property_ids']);
-            unset($params['property_ids']);
-
-            $product->update($params);
+            $product->update($params->except('property_ids' ?? null)->toArray());
+            $product->properties()->sync($params['property_ids'] ?? null);
 
             DB::commit();
 
