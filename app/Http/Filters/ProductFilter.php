@@ -32,7 +32,8 @@ class ProductFilter extends AbstractFilter
 
     public function labels(Builder $builder, $value): void
     {
-        foreach (['hit', 'recommend', 'newest'] as $label)
+        $labels = ['hit', 'recommend', 'newest'];
+        foreach ($labels as $label)
         {
             if ($value == $label)
             {
