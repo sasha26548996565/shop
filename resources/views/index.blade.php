@@ -15,13 +15,11 @@
                 </label>
             </div>
 
-            @foreach ($labels as $field => $name)
-                <div class="col-sm-2 col-md-2">
-                    <label for="{{ $field }}">
-                        <input type="checkbox" name="{{ $field }}" id="{{ $field }}"
-                        @checked(request()->has($field)) > {{ $name }} </label>
-                </div>
-            @endforeach
+            <select name="labels" multiple>
+                @foreach ($labels as $field => $name)
+                    <option value="{{ $field }}">{{ $name }}</option>
+                @endforeach
+            </select>
 
             <div class="col-sm-6 col-md-3">
                 <button type="submit" class="btn btn-primary">Фильтр</button>
@@ -30,11 +28,11 @@
         </div>
     </form>
     <div class="row">
-        @foreach ($products as $product)
-            @include('card', compact('product'))
+        @foreach ($skus as $sku)
+            @include('card', compact('sku'))
         @endforeach
     </div>
 
-    {{ $products->links('includes.pagination') }}
+    {{ $skus->links('includes.pagination') }}
 
 @endsection

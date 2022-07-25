@@ -20,18 +20,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($order->products as $product)
+                        @foreach ($order->skus as $sku)
                             <tr>
                                 <td>
-                                    <a href="{{ route('product', [$product->category->id, $product->id]) }}">
+                                    <a href="{{ route('sku', [$sku->product->category->id, $sku->product->id, $sku->id]) }}">
                                         <img height="56px"
-                                             src="{{ asset(Storage::url($product->image)) }}">
-                                        {{ $product->name }}
+                                             src="{{ asset(Storage::url($sku->product->image)) }}">
+                                        {{ $sku->product->name }}
                                     </a>
                                 </td>
-                                <td>{{ $product->pivot->count }}</td>
-                                <td>{{ $product->price }} {{ $order->currency->symbol }}</td>
-                                <td>{{ $product->getPriceForCount($product->pivot->count) }} {{ $order->currency->symbol }}</td>
+                                <td>{{ $sku->count }}</td>
+                                <td>{{ $sku->price }} {{ $order->currency->symbol }}</td>
+                                <td>{{ $sku->getPriceForCount($sku->count) }} {{ $order->currency->symbol }}</td>
                             </tr>
                         @endforeach
                         <tr>

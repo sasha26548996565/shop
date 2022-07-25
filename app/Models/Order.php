@@ -21,17 +21,32 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
     }
 
+    public function skus(): Relation
+    {
+        return $this->belongsToMany(Sku::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
+    }
+
     public function currency(): Relation
     {
         return $this->belongsTo(Currency::class, 'currency_id', 'id');
+    }
+
+    public function calculateFullSum()
+    {
+        $sum = 0;
+
+        foreach ($this->skus()->withTrashed()->get() as $sku)
+            $sum += $sku->getPriceForCount();
+
+        return $sum;
     }
 
     public function getFullSum(): float
     {
         $sum = 0;
 
-        foreach ($this->products as $product)
-            $sum += $product->price * $product->countInOrder;
+        foreach ($this->skus as $sku)
+            $sum += $sku->price * $sku->countInOrder;
 
         return $sum;
     }
@@ -45,23 +60,22 @@ class Order extends Model
         $this->user_id = Auth::check() ? Auth::user()->id : null;
         $this->currency_id = CurrencyConvertionService::getCurrentCurrencyFromSession()->id;
 
-        $products = $this->products;
+        $skus = $this->skus;
         $this->save();
 
-        $this->updateProduct($products);
+        $this->updateProduct($skus);
 
         session()->forget('order');
 
         return true;
     }
 
-    private function updateProduct($products): void
+    private function updateProduct($skus): void
     {
-        foreach ($products as $productInOrder)
-        {
-            $this->products()->attach($productInOrder, [
-                'count' => $productInOrder->countInOrder,
-                'price' => $productInOrder->price
+        foreach ($skus as $skuInOrder) {
+            $this->products()->attach($skuInOrder, [
+                'count' => $skuInOrder->countInOrder,
+                'price' => $skuInOrder->price
             ]);
         }
     }

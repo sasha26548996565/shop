@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory, Filterable, SoftDeletes, Translatable;
+    use HasFactory, SoftDeletes, Translatable;
 
     protected $guarded = [];
 
@@ -31,7 +31,7 @@ class Product extends Model
 
     public function skus(): Relation
     {
-        return $this->hasMany(Sku::class, 'sku_id', 'id');
+        return $this->hasMany(Sku::class, 'product_id', 'id');
     }
 
     public function properties(): Relation
@@ -44,14 +44,6 @@ class Product extends Model
         return $this->price * $count;
     }
 
-    public function getPriceForCount(): float
-    {
-        if (is_null($this->pivot))
-            return $this->price;
-
-        return $this->pivot->count * $this->price;
-    }
-
     public function getLabels(): array
     {
         return [
@@ -60,8 +52,6 @@ class Product extends Model
             'recommend' => 'Рекомендованные'
         ];
     }
-
-
 
     public function issetLabel(string $labelName): bool
     {
@@ -76,10 +66,5 @@ class Product extends Model
     public function disableLabel(string $label): void
     {
         $this->$label = 0;
-    }
-
-    public function isAvailable(): bool
-    {
-        return $this->count > 0;
     }
 }

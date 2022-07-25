@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Classes\Basket;
 use App\Models\Product;
+use App\Models\Sku;
 use DebugBar\DebugBar;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -36,23 +37,23 @@ class BasketController extends Controller
         return view('order', compact('order'));
     }
 
-    public function add(Product $product): RedirectResponse
+    public function add(Sku $sku): RedirectResponse
     {
         $order = (new Basket)->getOrder();
-        $result = (new Basket)->addProduct($product);
+        $result = (new Basket)->addProduct($sku);
 
         session()->flash($result ? 'successAdd' : 'errorAdd',
-            $result ? 'товар добавлен в корзину' : "Товар {$product->name} недоступен в большем количестве");
+            $result ? 'товар добавлен в корзину' : "Товар {$sku->product->name} недоступен в большем количестве");
 
         return to_route('basket', compact('order'));
     }
 
-    public function remove(Product $product): RedirectResponse
+    public function remove(Sku $sku): RedirectResponse
     {
         $order = (new Basket)->getOrder();
-        (new Basket)->removeProduct($product);
+        (new Basket)->removeProduct($sku);
 
-        session()->flash('successRemove', "удален продукт {$product->name}");
+        session()->flash('successRemove', "удален продукт {$sku->product->name}");
 
         return to_route('basket', compact('order'));
     }

@@ -5,37 +5,43 @@
 @section('content')
     <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-            <img src="{{ asset(Storage::url($product->image)) }}" alt="{{ $product->name }}">
+            <img src="{{ asset(Storage::url($sku->product->image)) }}" alt="{{ $sku->product->name }}">
 
             <div class="caption">
-                @foreach ($product->getLabels() as $field => $name)
-                    @if ($product->issetLabel($field))
+                @foreach ($sku->product->getLabels() as $field => $name)
+                    @if ($sku->product->issetLabel($field))
                         <span class="badge badge-success">{{ $name }}</span>
                     @endif
                 @endforeach
 
-                <h3>{{ $product->name }}</h3>
-                <p>Осталось: {{ $product->count }}</p>
-                <p>{{ $product->price }} RUB</p>
-                <p>{{ $product->category->name }}</p>
+                <h3>{{ $sku->product->__('name') }}</h3>
+                <p>Осталось: {{ $sku->count }}</p>
+                <p>{{ $sku->price }} </p>
+                <p>{{ $sku->product->category->__('name') }}</p>
 
-                @if ($product->isAvailable())
-                    <form action="{{ route('basket-add', $product->id) }}" method="POST">
+                @isset($sku->product->properties)
+                    <p>
+                        @foreach ($sku->propertyOptions as $propertyOption)
+                            {{ $propertyOption->property->__('name') }} : {{ $propertyOption->__('name') }};
+                        @endforeach
+                    </p>
+                @endisset
+
+                @if ($sku->isAvailable())
+                    <form action="{{ route('basket-add', $sku) }}" method="POST">
                         @csrf
 
-                        <input type="submit" class="btn btn-primary" value="корзина">
+                        <button type="submit" class="btn btn-primary" role="button">{{ __('main.add_to_basket') }}</button>
                     </form>
                 @else
-                    Нет на складе<br><br>
-
-                    <form action="{{ route('subscription', $product->id) }}" method="POST">
+                    <form action="{{ route('subscription', $sku->id) }}" method="POST">
                         @csrf
 
                         @guest
-                            <input type="email" name="email" required class="form-control" placeholder="email"
-                                value="{{ old('email') }}"><br>
+                            <input type="email" name="email" required>
                         @endguest
-                        <input type="submit" class="btn btn-dark" value="Сообщить когда товар будет в наличии">
+
+                        <input type="submit" class="btn btn-primary" value="сообщить когда тавор будет в наличии">
                     </form>
                 @endif
             </div>

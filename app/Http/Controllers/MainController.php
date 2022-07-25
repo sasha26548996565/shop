@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Sku;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Http\Filters\ProductFilter;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Services\CurrencyRatesService;
 use App\Http\Requests\SubscriptionRequest;
 use App\Http\Requests\ProductFilterRequest;
-use App\Services\CurrencyRatesService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\App;
 
 class MainController extends Controller
 {
@@ -29,11 +30,11 @@ class MainController extends Controller
     public function index(ProductFilterRequest $request): View
     {
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($request->validated())]);
-        $products = Product::with('category')->filter($filter)->latest()->paginate(10);
+        $skus = Sku::with(['product', 'product.category'])->filter($filter)->latest()->paginate(10);
 
         $labels = $this->product->getLabels();
 
-        return view('index', compact('products', 'labels'));
+        return view('index', compact('skus', 'labels'));
     }
 
     public function categories(): View
@@ -43,10 +44,12 @@ class MainController extends Controller
         return view('categories', compact('categories'));
     }
 
-    public function product(string $category, string $product): View
+    public function sku(string $categorySlug, string $productSlug, Sku $sku): View
     {
-        $product = Product::where('slug', $product)->first();
-        return view('product', compact('product'));
+        abort_if($sku->product->slug != $productSlug, 404);
+        abort_if($sku->product->category->slug != $categorySlug, 404);
+
+        return view('product', compact('sku'));
     }
 
     public function category(string $slug): View
@@ -56,12 +59,12 @@ class MainController extends Controller
         return view('category', compact('category'));
     }
 
-    public function subscripe(SubscriptionRequest $request, Product $product): RedirectResponse
+    public function subscripe(SubscriptionRequest $request, Sku $sku): RedirectResponse
     {
         $email = Auth::check() ? Auth::user()->email : $request->validated()->email;
 
-        Subscription::create(['email' => $email, 'product_id' => $product->id]);
+        Subscription::create(['email' => $email, 'sku_id' => $sku->id]);
 
-        return redirect()->back()->with('success',  "Спасибо, мы сообщим вам когда продукт $product->name будет в наличии");
+        return redirect()->back()->with('success',  "Спасибо, мы сообщим вам когда продукт {$sku->product->name} будет в наличии");
     }
 }

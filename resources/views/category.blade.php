@@ -10,8 +10,8 @@
         {{ $category->__('description') }}
     </p>
     <div class="row">
-        @foreach ($category->products()->with('category')->get() as $product)
-            @include('card', $product)
+        @foreach ($category->products->map->skus->flatten() as $sku)
+            @include('card', $sku)
         @endforeach
     </div>
 @endsection

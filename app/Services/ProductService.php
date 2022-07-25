@@ -60,7 +60,6 @@ class ProductService
             $product->properties()->sync($params['property_ids']);
             unset($params['property_ids']);
 
-            event(new ProductUpdated($product));
             $product->update($params);
 
             DB::commit();

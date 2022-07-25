@@ -2,6 +2,7 @@
 
 namespace App\ViewComposers;
 
+use App\Models\Sku;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
@@ -10,12 +11,11 @@ class PopularProductComposer implements ViewComposerContract
 {
     public function compose(View $view): View
     {
-        $popularProductsIds = Order::latest()->get()->map->products->flatten()->map->pivot->mapToGroups(function ($pivot) {
-            return [$pivot->product_id => $pivot->count];
-        })->map->sum()->sortDesc()->take(3)->keys()->toArray();
+        $bestSkuIds = Order::get()->map->skus->flatten()->map->pivot->mapToGroups(function ($pivot) {
+            return [$pivot->sku_id => $pivot->count];
+        })->map->sum()->sortByDesc(null)->take(3)->keys()->toArray();
 
-        $popularProducts = Product::whereIn('id', $popularProductsIds)->get();
-
-        return $view->with('popularProducts', $popularProducts);
+        $bestSkus = Sku::whereIn('id', $bestSkuIds)->get();
+        return $view->with('popularProducts', $bestSkus);
     }
 }

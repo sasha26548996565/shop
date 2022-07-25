@@ -26,9 +26,7 @@ class ProductFilterRequest extends FormRequest
         return [
             'price_from' => 'nullable|numeric|min:0',
             'price_to' => 'nullable|numeric|min:0',
-            'hit' => '',
-            'newest' => '',
-            'recommend' => ''
+            'labels' => ''
         ];
     }
 }

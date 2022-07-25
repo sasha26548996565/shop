@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
-use App\Jobs\OrderCreateJob;
+use App\Models\Sku;
 use App\Models\Order;
 use App\Models\Product;
+use App\Jobs\OrderCreateJob;
 use App\Mail\OrderCreatedMail;
-use App\Services\CurrencyConvertionService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Services\CurrencyConvertionService;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Basket
@@ -41,65 +42,59 @@ class Basket
 
     public function countAvailable(bool $updateCount = false)
     {
-        $products = collect([]);
+        $skus = collect([]);
 
-        foreach ($this->order->products as $orderProduct)
+        foreach ($this->order->skus as $orderSku)
         {
-            $pivotRow = $this->order->products->where('id', $orderProduct->id)->first();
-            $product = Product::findOrFail($orderProduct->id);
+            $sku = Sku::find($orderSku->id);
 
-            if ($pivotRow->countInOrder > $product->count)
+            if ($orderSku->countInOrder > $sku->count)
                 return false;
 
             if ($updateCount)
             {
-                $orderProduct->count -= $orderProduct->countInOrder;
-                $products->push($product);
+                $sku->count -= $orderSku->countInOrder;
+                $skus->push($sku);
             }
         }
 
         if ($updateCount)
-            $products->map->save();
+            $skus->map->save();
 
         return true;
     }
 
-    public function addProduct(Product $product): bool
+    public function addProduct(Sku $sku): bool
     {
-        if ($this->order->products->contains($product))
+        if ($this->order->skus->contains($sku))
         {
-            $pivotRow = $this->order->products->where('id', $product->id)->first();
-            if ($pivotRow->countInOrder >= $product->count)
-            {
+            $pivotRow = $this->order->skus->where('id', $sku->id)->first();
+
+            if ($pivotRow->countInOrder >= $sku->count)
                 return false;
-            }
 
             $pivotRow->countInOrder++;
         } else
         {
-            if ($product->count == 0)
-            {
+            if ($sku->count == 0)
                 return false;
-            }
 
-            $product->countInOrder = 1;
-            $this->order->products->push($product);
+            $sku->countInOrder = 1;
+            $this->order->skus->push($sku);
         }
-
-        $product = Product::findOrFail($product->id);
 
         return true;
     }
 
-    public function removeProduct(Product $product): bool
+    public function removeProduct(Sku $sku): bool
     {
-        if ($this->order->products->contains($product) == false)
+        if ($this->order->skus->contains($sku) == false)
             return false;
 
-        $pivotRow = $this->order->products->where('id', $product->id)->first();
+        $pivotRow = $this->order->skus->where('id', $sku->id)->first();
 
         if ($pivotRow->countInOrder < 2)
-            $this->order->products->pop($product->id);
+            $this->order->skus->pop($sku->id);
         else
             $pivotRow->countInOrder--;
 

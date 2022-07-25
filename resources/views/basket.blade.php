@@ -16,23 +16,23 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($order->products as $product)
+                @foreach ($order->skus as $sku)
                     <tr>
                         <td>
-                            <a href="{{ route('product', [$product->category->slug, $product->slug]) }}">
-                                <img height="56px" src="{{ asset(Storage::url($product->image)) }}">
-                                {{ $product->name }}
+                            <a href="{{ route('sku', [$sku->product->category->slug, $sku->product->slug, $sku->id]) }}">
+                                <img height="56px" src="{{ asset(Storage::url($sku->product->image)) }}">
+                                {{ $sku->product->name }}
                             </a>
                         </td>
-                        <td><span class="badge">{{ $product->countInOrder ?? 1 }}</span>
+                        <td><span class="badge">{{ $sku->countInOrder ?? 1 }}</span>
                             <div class="btn-group form-inline">
-                                <form action="{{ route('basket-remove', $product) }}" method="POST"
+                                <form action="{{ route('basket-remove', $sku->id) }}" method="POST"
                                     class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-danger" href=""><span
                                             class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
                                 </form>
-                                <form action="{{ route('basket-add', $product) }}" method="POST"
+                                <form action="{{ route('basket-add', $sku->id) }}" method="POST"
                                     class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-success" href=""><span
@@ -40,8 +40,8 @@
                                 </form>
                             </div>
                         </td>
-                        <td>{{ $product->price }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
-                        <td>{{ $product->price * ($product->countInOrder ?? 1 )}} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
+                        <td>{{ $sku->price }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
+                        <td>{{ $sku->price * ($sku->countInOrder ?? 1 )}} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
                     </tr>
                 @endforeach
                 <tr>

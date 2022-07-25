@@ -11,11 +11,9 @@ class ProductEmailNotification
 {
     public function handle(ProductUpdated $event)
     {
-        $oldCount = $event->product->getOriginal('count');
-
-        if ($oldCount == 0)
+        if ($event->sku->count > 0)
         {
-            Subscription::sendEmailBySubscription($event->product);
+            Subscription::sendEmailBySubscription($event->sku);
         }
     }
 }

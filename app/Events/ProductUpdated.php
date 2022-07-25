@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Sku;
 use App\Models\Product;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -15,10 +16,10 @@ class ProductUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public readonly Product $product;
+    public readonly Sku $sku;
 
-    public function __construct(Product $product)
+    public function __construct(Sku $sku)
     {
-        $this->product = $product;
+        $this->sku = $sku;
     }
 }

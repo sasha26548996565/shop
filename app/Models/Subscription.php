@@ -18,23 +18,23 @@ class Subscription extends Model
 
     protected $guarded = [];
 
-    public function product(): Relation
+    public function sku(): Relation
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->belongsTo(Sku::class, 'sku_id', 'id');
     }
 
-    public function scopeActiveByProductId($query, int $productId): Builder
+    public function scopeActiveBySkuId($query, int $skuId): Builder
     {
-        return $query->where('status', 0)->where('product_id', $productId);
+        return $query->where('status', 0)->where('sku_id', $skuId);
     }
 
-    public static function sendEmailBySubscription(Product $product): void
+    public static function sendEmailBySubscription(Sku $sku): void
     {
-        $subscriptions = self::activeByProductId($product->id)->get();
+        $subscriptions = self::activeBySkuId($sku->id)->get();
 
         foreach ($subscriptions as $subscription)
         {
-            dispatch(new SendSubscriptionJob($subscription->email, $product));
+            dispatch(new SendSubscriptionJob($subscription->email, $sku));
 
             $subscription->status = 1;
             $subscription->save();

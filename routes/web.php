@@ -36,20 +36,20 @@ Route::namespace('App\Http\Controllers')->group(function () {
         Route::get('/', 'MainController@index')->name('index');
 
         Route::name('basket')->prefix('basket')->group(function () {
-            Route::post('/add/{product}', 'BasketController@add')->name('-add');
+            Route::post('/add/{sku}', 'BasketController@add')->name('-add');
 
             Route::middleware(['basket_not_empty'])->group(function () {
                 Route::get('/', 'BasketController@index')->name('');
                 Route::get('/place', 'BasketController@place')->name('-place');
                 Route::post('/confirm', 'BasketController@confirm')->name('-confirm');
-                Route::post('/remove/{product}', 'BasketController@remove')->name('-remove');
+                Route::post('/remove/{sku}', 'BasketController@remove')->name('-remove');
             });
         });
 
         Route::get('/categories', 'MainController@categories')->name('categories');
         Route::get('/categories/{category}', 'MainController@category')->name('category');
-        Route::get('/{category}/{productS}', 'MainController@product')->name('product');
-        Route::post('subscription/{product}', 'MainController@subscripe')->name('subscription');
+        Route::get('/{category}/{product}/{sku}', 'MainController@sku')->name('sku');
+        Route::post('subscription/{sku}', 'MainController@subscripe')->name('subscription');
     });
 
     //Route::middleware('reset')->get('/reset/fghfgh/fghfg/hfg/hf/gh/fgh/gf', 'ResetController')->name('reset');

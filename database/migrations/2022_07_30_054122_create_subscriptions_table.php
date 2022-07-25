@@ -12,7 +12,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('email');
-            $table->foreignId('product_id')->constrained();
+            $table->tinyInteger('status')->default(0);
+            $table->foreignId('sku_id')->constrained()->onDelete('CASCADE');
 
             $table->timestamps();
         });
