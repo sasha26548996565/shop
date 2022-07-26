@@ -31,6 +31,11 @@ class Order extends Model
         return $this->belongsTo(Currency::class, 'currency_id', 'id');
     }
 
+    public function coupon(): Relation
+    {
+        return $this->belongsTo(Coupon::class, 'coupon_id', 'id');
+    }
+
     public function calculateFullSum()
     {
         $sum = 0;
