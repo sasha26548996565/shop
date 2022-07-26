@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('coupon_id')->contrained()->cascadeOnDelete()->nullable();
+            $table->foreignId('coupon_id')->nullable()->contrained()->onDelete('cascade');
         });
     }
 

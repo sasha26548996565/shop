@@ -31,6 +31,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
             Route::resource('products/{product}/skus', 'SkuController');
             Route::resource('properties', 'PropertyController');
             Route::resource('properties/{property}/property-options', 'PropertyOptionController');
+            Route::resource('coupons', 'CouponController');
         });
 
         Route::get('/', 'MainController@index')->name('index');

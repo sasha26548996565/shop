@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('code', 8);
             $table->double('value');
             $table->unsignedTinyInteger('type')->defualt(0);
-            $table->foreignId('currency_id')->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('cascade');
             $table->unsignedTinyInteger('only_ones')->default(0);
             $table->timestamp('expired_at');
             $table->text('description')->nullable();

@@ -11,8 +11,9 @@ class Coupon extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $dates = ['expired_at'];
 
-    public function order(): Relation
+    public function orders(): Relation
     {
         return $this->hasMany(Order::class, 'coupon_id', 'id');
     }
@@ -20,5 +21,15 @@ class Coupon extends Model
     public function currency(): Relation
     {
         return $this->belongsTo(Currency::class, 'currency_id', 'id');
+    }
+
+    public function isAbsolute(): bool
+    {
+        return $this->type == 1;
+    }
+
+    public function isOnlyOnes(): bool
+    {
+        return $this->only_ones == 1;
     }
 }

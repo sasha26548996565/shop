@@ -2,85 +2,83 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Coupon;
+use App\Models\Currency;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CouponRequest;
+use Illuminate\Http\RedirectResponse;
 
 class CouponController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): View
     {
-        //
+        $coupons = Coupon::latest()->paginate(10);
+
+        return view('auth.coupons.index', compact('coupons'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(): View
     {
-        //
+        $currencies = Currency::latest()->get();
+
+        return view('auth.coupons.form', compact('currencies'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(CouponRequest $request): RedirectResponse
     {
-        //
+        $params = $request->validated();
+
+        foreach (['type', 'only_ones'] as $fieldName)
+        {
+            if (isset($params[$fieldName]))
+            {
+                $params[$fieldName] = 1;
+            }
+        }
+
+        $coupon = Coupon::create($params);
+
+        return to_route('admin.coupons.show', $coupon->id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Coupon $coupon)
+    public function show(Coupon $coupon): View
     {
-        //
+        return view('auth.coupons.show', compact('coupon'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Coupon $coupon)
+    public function edit(Coupon $coupon): View
     {
-        //
+        $currencies = Currency::latest()->get();
+
+        return view('auth.coupons.form', compact('coupon', 'currencies'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Coupon $coupon)
+    public function update(CouponRequest $request, Coupon $coupon): RedirectResponse
     {
-        //
+        $params = $request->validated();
+
+        foreach (['type', 'only_ones'] as $fieldName)
+        {
+            if (isset($params[$fieldName]))
+            {
+                $params[$fieldName] = 1;
+            } else
+            {
+                $params[$fieldName] = 0;
+            }
+        }
+
+        $coupon->update($params);
+
+        return to_route('admin.coupons.show', $coupon->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Coupon $coupon)
+    public function destroy(Coupon $coupon): RedirectResponse
     {
-        //
+        $coupon->delete();
+
+        return to_route('admin.coupons.index');
     }
 }
