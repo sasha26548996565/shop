@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('subscriptions', function (Blueprint $table) {
-            $table->tinyInteger('status')->default(0);
+        Schema::table('orders', function (Blueprint $table) {
+            //
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('subscriptions', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('orders', function (Blueprint $table) {
+            //
         });
     }
 };

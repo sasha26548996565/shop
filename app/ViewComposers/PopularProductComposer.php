@@ -16,6 +16,6 @@ class PopularProductComposer implements ViewComposerContract
         })->map->sum()->sortByDesc(null)->take(3)->keys()->toArray();
 
         $bestSkus = Sku::whereIn('id', $bestSkuIds)->get();
-        return $view->with('popularProducts', $bestSkus);
+        return $view->with('popularSkus', $bestSkus);
     }
 }

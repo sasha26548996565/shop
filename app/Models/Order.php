@@ -23,7 +23,7 @@ class Order extends Model
 
     public function skus(): Relation
     {
-        return $this->belongsToMany(Sku::class, 'order_product', 'order_id', 'product_id')->withPivot('count')->withTimestamps();
+        return $this->belongsToMany(Sku::class, 'order_sku', 'order_id', 'sku_id')->withPivot('count')->withTimestamps();
     }
 
     public function currency(): Relation
@@ -73,7 +73,7 @@ class Order extends Model
     private function updateProduct($skus): void
     {
         foreach ($skus as $skuInOrder) {
-            $this->products()->attach($skuInOrder, [
+            $this->skus()->attach($skuInOrder, [
                 'count' => $skuInOrder->countInOrder,
                 'price' => $skuInOrder->price
             ]);

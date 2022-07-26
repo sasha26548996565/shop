@@ -10,8 +10,9 @@
             </div>
             <div class="col-lg-6"><p>Самые популярные товары</p>
                 <ul>
-                    @foreach ($popularProducts as $product)
-                        <li><a href="{{ route('product', [$product->category->slug, $product->slug]) }}">{{ $product->__('name') }}</a></li>
+                    @foreach ($popularSkus as $sku)
+                        <li><a href="{{ route('sku', [$sku->product->category->slug, $sku->product->slug, $sku->id]) }}">
+                            {{ $sku->product->__('name') }}</a></li>
                     @endforeach
                 </ul>
             </div>
