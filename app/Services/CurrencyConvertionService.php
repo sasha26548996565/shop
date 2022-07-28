@@ -32,7 +32,7 @@ class CurrencyConvertionService
         self::$currencyRates = new CurrencyRatesService(new Client());
     }
 
-    public static function convert(float $sum = 100, string $originCurrencyCode = self::DEFAULT_CURRENCY_CODE, ?string $targetCurrencyCode = null): float
+    public static function convert(float $sum, string $originCurrencyCode = self::DEFAULT_CURRENCY_CODE, ?string $targetCurrencyCode = null): float
     {
         self::loadContainer();
 
@@ -45,7 +45,7 @@ class CurrencyConvertionService
 
         $targetCurrency = self::$container[$targetCurrencyCode];
 
-        return round($sum / $originCurrency->rate * $targetCurrency->rate, 2);
+        return round($sum / $targetCurrency->rate, 2);
     }
 
     public static function getCurrencySymbol(): string

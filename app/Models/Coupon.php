@@ -25,11 +25,11 @@ class Coupon extends Model
 
     public function isAbsolute(): bool
     {
-        return $this->type == 1;
+        return $this->type;
     }
 
     public function isOnlyOnes(): bool
     {
-        return $this->only_ones == 1;
+        return $this->only_ones;
     }
 }

@@ -12,7 +12,7 @@
             <h3>{{ $sku->product->__('name') }}</h3>
             <p>{{ $sku->product->category->__('name') }}</p>
             <p>Осталось: {{ $sku->count }}</p>
-            <p>{{ $sku->price }} </p>
+            <p>{{ $sku->price }} {{ $currencySymbol }}</p>
 
             @isset($sku->product->properties)
                 <p>

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Traits\Filterable;
+use App\Services\CurrencyConvertionService;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -35,5 +37,12 @@ class Sku extends Model
             return $this->price;
 
         return $this->pivot->count * $this->price;
+    }
+
+    public function price(): Attribute
+    {
+        return new Attribute(
+            get: fn(float $value) => CurrencyConvertionService::convert($value)
+        );
     }
 }
