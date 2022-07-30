@@ -32,6 +32,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
             Route::resource('properties', 'PropertyController');
             Route::resource('properties/{property}/property-options', 'PropertyOptionController');
             Route::resource('coupons', 'CouponController');
+            Route::resource('merchants', 'MerchantController');
+            Route::get('merchants/{merchant}/update-token', 'MerchantController@updateToken')->name('merchants.update_token');
         });
 
         Route::get('/', 'MainController@index')->name('index');
