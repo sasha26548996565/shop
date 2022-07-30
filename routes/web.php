@@ -38,6 +38,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
         Route::name('basket')->prefix('basket')->group(function () {
             Route::post('/add/{sku}', 'BasketController@add')->name('-add');
+            Route::post('/coupon', 'CouponController@add')->name('-coupon-save');
 
             Route::middleware(['basket_not_empty'])->group(function () {
                 Route::get('/', 'BasketController@index')->name('');

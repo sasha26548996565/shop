@@ -40,18 +40,48 @@
                                 </form>
                             </div>
                         </td>
-                        <td>{{ $sku->price }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
-                        <td>{{ $sku->price * ($sku->countInOrder ?? 1 )}} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
+                        <td>{{ $sku->price }} {{ $currencySymbol }}</td>
+                        <td>{{ $sku->price * ($sku->countInOrder) }} {{ $currencySymbol }}</td>
                     </tr>
                 @endforeach
                 <tr>
                     <td colspan="3">Общая стоимость:</td>
+
                     @isset ($order)
-                        <td>{{ $order->getFullSum() }} {{ App\Services\CurrencyConvertionService::getCurrencySymbol() }}</td>
+                        <td>
+                            @isset ($order->coupon)
+                                {{ $order->getFullSumWithCoupon() }}
+                            @else
+                                {{ $order->getFullSum() }}
+                            @endisset
+
+                            {{ $currencySymbol }}
+                        </td>
                     @endisset
                 </tr>
             </tbody>
         </table>
+        <br>
+
+        <div class="row">
+            <div class="form-inline pull-right">
+                @if ($order->hasCoupon())
+                    <p>{{ __('basket.coupon.your_coupon') }} {{ $order->coupon->code }}</p>
+                @else
+                    <form method="POST" action="{{ route('basket-coupon-save') }}">
+                        @csrf
+
+                        @include('auth.layouts.error', ['fieldName' => 'coupon'])
+
+                        <label for="coupon">{{ __('basket.coupon.add_coupon') }}:</label>
+                        <input class="form-control" type="text" name="coupon">
+
+                        <button type="submit" class="btn btn-success">{{ __('basket.coupon.apply') }}</button>
+                    </form>
+                @endif
+            </div>
+        </div>
+
         <br>
         <div class="btn-group pull-right" role="group">
             <a type="button" class="btn btn-success" href="{{ route('basket-place') }}">Оформить

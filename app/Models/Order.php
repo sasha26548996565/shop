@@ -56,6 +56,11 @@ class Order extends Model
         return $sum;
     }
 
+    public function getFullSumWithCoupon(): float
+    {
+        return $this->coupon->applyCost($this->getFullSum());
+    }
+
     public function saveOrder(string $name, string $phone): bool
     {
         $this->name = $name;
@@ -88,5 +93,10 @@ class Order extends Model
     public function scopeGetActive(Builder $query): Builder
     {
         return $query->where('status', 1);
+    }
+
+    public function hasCoupon()
+    {
+        return isset($this->coupon);
     }
 }

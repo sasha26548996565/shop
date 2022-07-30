@@ -30,13 +30,8 @@ class CouponController extends Controller
     {
         $params = $request->validated();
 
-        foreach (['type', 'only_ones'] as $fieldName)
-        {
-            if (isset($params[$fieldName]))
-            {
-                $params[$fieldName] = 1;
-            }
-        }
+        if (isset($request['type']))
+            $params['type'] = 1;
 
         $coupon = Coupon::create($params);
 
@@ -59,16 +54,10 @@ class CouponController extends Controller
     {
         $params = $request->validated();
 
-        foreach (['type', 'only_ones'] as $fieldName)
-        {
-            if (isset($params[$fieldName]))
-            {
-                $params[$fieldName] = 1;
-            } else
-            {
-                $params[$fieldName] = 0;
-            }
-        }
+        if (isset($request['type']))
+            $params['type'] = 1;
+        else
+            $params['type'] = 0;
 
         $coupon->update($params);
 

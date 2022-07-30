@@ -17,7 +17,7 @@ class CouponRequest extends FormRequest
             'code' => 'required|min:6|max:8',
             'value' => 'required',
             'type' => '',
-            'only_ones' => '',
+            'limit' => 'required|integer|min:1',
             'currency_id' => 'required_with:type',
             'description' => '',
             'expired_at' => ''

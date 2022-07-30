@@ -60,11 +60,21 @@ class BasketController extends Controller
 
     public function confirm(Request $request): RedirectResponse
     {
+        $basket = new Basket();
+
+        if ($basket->getOrder()->hasCoupon() && !$basket->getOrder()->coupon->isAvailable())
+        {
+            $basket->clearCoupon();
+            session()->flash('warning', __('basket.coupon.not_available'));
+
+            return to_route('index');
+        }
+
         $email = Auth::check() ? Auth::user()->email : $request->email;
-        $result = (new Basket)->saveOrder($request->name, $request->phone, $email);
+        $result = $basket->saveOrder($request->name, $request->phone, $email);
 
         session()->flash($result ? 'success' : 'error',
-            $result ? 'ваш заказ принят в обработку' : 'ваш заказ не принят в обработку, возникла ошибка');
+            $result ? __('basket.you_order_confirmed') : __('basket.you_cant_order_more'));
 
         return to_route('index');
     }

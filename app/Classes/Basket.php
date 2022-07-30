@@ -9,10 +9,12 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Jobs\OrderCreateJob;
 use App\Mail\OrderCreatedMail;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Services\CurrencyConvertionService;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use PHPUnit\Framework\Constraint\Count;
 
 class Basket
 {
@@ -115,5 +117,15 @@ class Basket
         }
 
         return $order;
+    }
+
+    public function setCoupon(Coupon $coupon): void
+    {
+        $this->order->coupon()->associate($coupon);
+    }
+
+    public function clearCoupon(): void
+    {
+        $this->order->coupon()->dissociate();
     }
 }

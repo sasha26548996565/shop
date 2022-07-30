@@ -39,6 +39,13 @@
                             <td>{{ $order->sum }} {{ $order->currency->symbol }}</td>
                         </tr>
 
+                        @if ($order->hasCoupon())
+                            <tr>
+                                <td>Купон: </td>
+                                <td><a href="{{ route('admin.coupons.show', $order->coupon->id) }}">{{ $order->coupon->code }}</a></td>
+                            </tr>
+                        @endif
+
                         </tbody>
                     </table>
                     <br>

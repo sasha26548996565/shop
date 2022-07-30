@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Services\CurrencyConvertionService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Coupon extends Model
 {
@@ -28,8 +30,27 @@ class Coupon extends Model
         return $this->type;
     }
 
-    public function isOnlyOnes(): bool
+    private function issetExpiredAt(): bool
     {
-        return $this->only_ones;
+        return isset($this->expired_at);
+    }
+
+    private function checkExpiredAt(): bool
+    {
+        return $this->issetExpiredAt() && $this->expired_at->gte(Carbon::now());
+    }
+
+    public function isAvailable(): bool
+    {
+        $this->refresh();
+        return $this->checkExpiredAt() && $this->orders->count() < $this->limit;
+    }
+
+    public function applyCost(float $price): float
+    {
+        if ($this->isAbsolute())
+            return $price - CurrencyConvertionService::convert($price, $this->currency->code, session()->get('currency'));
+        else
+            return $price - ($price * $this->value / 100);
     }
 }

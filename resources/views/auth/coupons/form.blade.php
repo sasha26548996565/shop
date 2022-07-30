@@ -58,28 +58,31 @@
                     </div>
                 </div>
                 <br>
-                @foreach ([
-                'type' => 'Абсолютное значение',
-                'only_ones' => 'Купон может быть использован только один раз',
-                ] as $field => $title)
-                    <div class="form-group row">
-                        <label for="code" class="col-sm-2 col-form-label">{{ $title }}: </label>
-                        <div class="col-sm-10">
-                            <input type="checkbox" name="{{$field}}" id="{{$field}}"
-                                @checked(isset($coupon) && $coupon->$field == 1)
-                            >
-                        </div>
+                <div class="form-group row">
+                    <label for="code" class="col-sm-2 col-form-label">Абсолютное значение: </label>
+                    <div class="col-sm-10">
+                        <input type="checkbox" name="type" id="type"
+                            @checked(isset($coupon) && $coupon->type == 1)
+                        >
                     </div>
-                    <br>
-                @endforeach
+                </div>
+
+                <br>
+
+                <div class="form-group row">
+                    <label for="limit" class="col-sm-2 col-form-label">Лимит</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="limit" id="limit" value="{{ isset($coupon) ? $coupon->limit : '' }}">
+                    </div>
+                </div>
+
                 <br>
                 <div class="input-group row">
                     <label for="expired_at" class="col-sm-2 col-form-label">Использовать до: </label>
                     <div class="col-sm-6">
                         @include('auth.layouts.error', ['fieldName' => 'expired_at'])
                         <input type="date" class="form-control" name="expired_at" id="expired_at"
-                               value="@if(isset($coupon) && !is_null($coupon->expired_at)){{
-                               $coupon->expired_at->format('Y-m-d') }}@endif">
+                               value="{{ isset($coupon) && !is_null($coupon->expired_at) ? $coupon->expired_at->format('Y-m-d') : '' }}">
                     </div>
                 </div>
                 <br>

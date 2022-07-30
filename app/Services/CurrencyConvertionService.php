@@ -79,7 +79,7 @@ class CurrencyConvertionService
 
     public static function getCurrencyFromSession()
     {
-        return session('currency', self::DEFAULT_CURRENCY_CODE);
+        return session()->get('currency');
     }
 
     public static function getCurrentCurrencyFromSession()
