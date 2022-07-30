@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\Filterable;
 use App\Services\CurrencyConvertionService;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,6 +25,11 @@ class Sku extends Model
     public function propertyOptions(): Relation
     {
         return $this->belongsToMany(PropertyOption::class, 'sku_property_option', 'sku_id', 'property_option_id')->withTimeStamps();
+    }
+
+    public function scopeAvailable(Builder $query): Builder
+    {
+        return $query->where('count', '>', 0);
     }
 
     public function isAvailable(): bool

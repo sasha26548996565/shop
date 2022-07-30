@@ -11,6 +11,8 @@ class SkuController extends Controller
 {
     public function getSku(): Response
     {
-        return response()->json(Sku::with('product')->latest()->get());
+        $sku = Sku::with('product')->available()->latest()->get();
+
+        return response()->json($sku);
     }
 }
