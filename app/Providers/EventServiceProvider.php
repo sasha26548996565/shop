@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\TokenUpdated;
 use App\Events\ProductUpdated;
-use App\Listeners\ProductEmailNotification;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\SendTokenNotification;
+use App\Listeners\ProductEmailNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -23,7 +25,11 @@ class EventServiceProvider extends ServiceProvider
 
         ProductUpdated::class => [
             ProductEmailNotification::class
-        ]
+        ],
+
+        TokenUpdated::class => [
+            SendTokenNotification::class
+        ],
     ];
 
     /**

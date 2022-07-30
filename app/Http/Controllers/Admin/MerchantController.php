@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Merchants\TokenAction;
+use App\Events\TokenUpdated;
 use App\Models\Merchant;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
@@ -12,6 +14,13 @@ use Illuminate\Http\RedirectResponse;
 
 class MerchantController extends Controller
 {
+    private TokenAction $tokenAction;
+
+    public function __construct(TokenAction $tokenAction)
+    {
+        $this->tokenAction = $tokenAction;
+    }
+
     public function index(): View
     {
         $merchants = Merchant::latest()->paginate(10);
@@ -57,8 +66,8 @@ class MerchantController extends Controller
 
     public function updateToken(Merchant $merchant): RedirectResponse
     {
-        $token = $merchant->createToken();
-        session()->flash('success', $token);
+        $token = $this->tokenAction->updateToken($merchant);
+        event(new TokenUpdated($merchant->email, $token));
 
         return to_route('admin.merchants.index');
     }

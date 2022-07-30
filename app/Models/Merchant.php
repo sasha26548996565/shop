@@ -22,17 +22,8 @@ class Merchant extends Model
         $this->lengthToken = 60;
     }
 
-    public function createToken(): string
+    public function tokenGenerate(): string
     {
-        $token = $this->tokenGenerate($this->lengthToken);
-        $this->token = hash('sha256', $token);
-        $this->save();
-
-        return $token;
-    }
-
-    private function tokenGenerate(int $lengthToken): string
-    {
-        return Str::random($lengthToken);
+        return Str::random($this->lengthToken);
     }
 }
