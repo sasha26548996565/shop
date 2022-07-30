@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Merchants\TokenAction;
-use App\Events\TokenUpdated;
 use App\Models\Merchant;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
@@ -66,8 +65,7 @@ class MerchantController extends Controller
 
     public function updateToken(Merchant $merchant): RedirectResponse
     {
-        $token = $this->tokenAction->updateToken($merchant);
-        event(new TokenUpdated($merchant->email, $token));
+        $this->tokenAction->updateToken($merchant);
 
         return to_route('admin.merchants.index');
     }
