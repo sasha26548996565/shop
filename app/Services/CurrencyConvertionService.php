@@ -79,7 +79,7 @@ class CurrencyConvertionService
 
     public static function getCurrencyFromSession()
     {
-        return session()->get('currency');
+        return session()->get('currency', 'RUB');
     }
 
     public static function getCurrentCurrencyFromSession()
